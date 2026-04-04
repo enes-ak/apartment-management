@@ -3,6 +3,104 @@
 {% block title %}Ana Sayfa - Apartman Yonetimi{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Ana Sayfa</h1>
-<p class="text-muted">Apartman yonetim paneline hosgeldiniz.</p>
+<h1 class="mb-4">{{ ay_adi }} {{ yil }} Ozeti</h1>
+
+<!-- Summary Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card bg-dark border-secondary ozet-kart h-100">
+            <div class="card-body text-center">
+                <h6 class="card-subtitle mb-2 text-muted">Aidat Miktari</h6>
+                <h3 class="card-title">{{ "%.2f"|format(aidat) }} TL</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-dark border-secondary ozet-kart h-100">
+            <div class="card-body text-center">
+                <h6 class="card-subtitle mb-2 text-muted">Tahsilat</h6>
+                <h3 class="card-title text-success">{{ odenen }}/{{ toplam_daire }}</h3>
+                <p class="text-success mb-0">{{ "%.2f"|format(odenen * aidat) }} TL</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-dark border-secondary ozet-kart h-100">
+            <div class="card-body text-center">
+                <h6 class="card-subtitle mb-2 text-muted">Toplam Gider</h6>
+                <h3 class="card-title text-danger">{{ "%.2f"|format(toplam_gider) }} TL</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-dark border-secondary ozet-kart h-100">
+            <div class="card-body text-center">
+                <h6 class="card-subtitle mb-2 text-muted">Kasa Bakiye</h6>
+                <h3 class="card-title">
+                    {% if kasa %}
+                        {{ "%.2f"|format(kasa.bakiye) }} TL
+                    {% else %}
+                        0.00 TL
+                    {% endif %}
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Unpaid Apartments Warning -->
+{% if odemeyenler %}
+<div class="card border-warning bg-dark mb-4">
+    <div class="card-body">
+        <h5 class="card-title text-warning">
+            <i class="bi bi-exclamation-triangle"></i> Aidat Odemeyenler ({{ odemeyenler|length }})
+        </h5>
+        <div class="row g-2">
+            {% for daire in odemeyenler %}
+            <div class="col-auto">
+                <span class="badge bg-warning text-dark">{{ daire.daire_no }}</span>
+                <small class="text-muted">{{ daire.sakin_adi }}</small>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Quick Access Cards -->
+<div class="row g-3">
+    <div class="col-md-4">
+        <a href="{{ url_for('odemeler.index') }}" class="text-decoration-none">
+            <div class="card bg-dark border-secondary h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-cash-stack fs-1 text-success"></i>
+                    <h5 class="card-title mt-2">Odeme Takibi</h5>
+                    <p class="card-text text-muted">Aidat odemelerini goruntuleyin ve yonetin.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('mesajlar.index') }}" class="text-decoration-none">
+            <div class="card bg-dark border-secondary h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-chat-dots fs-1 text-info"></i>
+                    <h5 class="card-title mt-2">Mesaj Hazirla</h5>
+                    <p class="card-text text-muted">Sakinlere bildirim ve hatirlatma gonderin.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('raporlar.index') }}" class="text-decoration-none">
+            <div class="card bg-dark border-secondary h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-file-earmark-bar-graph fs-1 text-warning"></i>
+                    <h5 class="card-title mt-2">Raporlar</h5>
+                    <p class="card-text text-muted">Aylik ve yillik raporlari indirin.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
 {% endblock %}
