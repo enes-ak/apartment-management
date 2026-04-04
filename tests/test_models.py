@@ -38,3 +38,56 @@ def test_ayar_getir_kaydet(db_session):
 
 def test_ayar_getir_varsayilan(db_session):
     assert Ayar.getir('yok_boyle_bir_sey', 'fallback') == 'fallback'
+
+
+def test_ayarlar_sayfasi_yukle(client):
+    response = client.get('/ayarlar/')
+    assert response.status_code == 200
+    assert 'Ayarlar'.encode() in response.data
+
+
+def test_ayarlar_apartman_adi_guncelle(client):
+    response = client.post('/ayarlar/genel', data={
+        'apartman_adi': 'Gul Apartmani',
+        'mail_adresi': 'test@test.com',
+        'smtp_sunucu': 'smtp.gmail.com',
+        'smtp_port': '587',
+        'smtp_sifre': '',
+    }, follow_redirects=True)
+    assert response.status_code == 200
+    from models import Ayar
+    assert Ayar.getir('apartman_adi') == 'Gul Apartmani'
+
+
+def test_aidat_guncelle(client):
+    response = client.post('/ayarlar/aidat', data={
+        'miktar': '750',
+    }, follow_redirects=True)
+    assert response.status_code == 200
+    from models import AidatAyari
+    assert AidatAyari.guncel_miktar() == 750
+
+
+def test_daire_guncelle(client):
+    from models import Daire
+    response = client.post('/ayarlar/daire/1', data={
+        'sakin_adi': 'Ahmet Yilmaz',
+        'telefon': '5551234567',
+    }, follow_redirects=True)
+    assert response.status_code == 200
+
+
+def test_gider_kalemi_ekle(client):
+    response = client.post('/ayarlar/gider-kalemi', data={
+        'kalem_adi': 'Dogalgaz',
+    }, follow_redirects=True)
+    assert response.status_code == 200
+    from models import GiderKalemi
+    assert GiderKalemi.query.filter_by(kalem_adi='Dogalgaz').first() is not None
+
+
+def test_gider_kalemi_pasif_yap(client):
+    from models import GiderKalemi
+    kalem = GiderKalemi.query.first()
+    response = client.post(f'/ayarlar/gider-kalemi/{kalem.id}/toggle', follow_redirects=True)
+    assert response.status_code == 200

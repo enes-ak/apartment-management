@@ -3,6 +3,176 @@
 {% block title %}Ayarlar - Apartman Yonetimi{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Ayarlar</h1>
-<p class="text-muted">Ayarlar sayfasi.</p>
+<h1 class="mb-4"><i class="bi bi-gear"></i> Ayarlar</h1>
+
+<!-- Genel Ayarlar -->
+<div class="card bg-dark border-secondary mb-4">
+    <div class="card-header border-secondary">
+        <h5 class="mb-0"><i class="bi bi-sliders"></i> Genel Ayarlar</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('ayarlar.genel_kaydet') }}">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="apartman_adi" class="form-label">Apartman Adi</label>
+                    <input type="text" class="form-control" id="apartman_adi" name="apartman_adi" value="{{ apartman_adi }}">
+                </div>
+                <div class="col-md-6">
+                    <label for="mail_adresi" class="form-label">E-posta Adresi</label>
+                    <input type="email" class="form-control" id="mail_adresi" name="mail_adresi" value="{{ mail_adresi }}">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="smtp_sunucu" class="form-label">SMTP Sunucu</label>
+                    <input type="text" class="form-control" id="smtp_sunucu" name="smtp_sunucu" value="{{ smtp_sunucu }}">
+                </div>
+                <div class="col-md-4">
+                    <label for="smtp_port" class="form-label">SMTP Port</label>
+                    <input type="text" class="form-control" id="smtp_port" name="smtp_port" value="{{ smtp_port }}">
+                </div>
+                <div class="col-md-4">
+                    <label for="smtp_sifre" class="form-label">SMTP Sifre</label>
+                    <input type="password" class="form-control" id="smtp_sifre" name="smtp_sifre" value="{{ smtp_sifre }}">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Kaydet</button>
+        </form>
+    </div>
+</div>
+
+<!-- Aidat Miktari -->
+<div class="card bg-dark border-secondary mb-4">
+    <div class="card-header border-secondary">
+        <h5 class="mb-0"><i class="bi bi-cash-coin"></i> Aidat Miktari</h5>
+    </div>
+    <div class="card-body">
+        <p>Guncel aidat miktari: <strong>{{ "%.2f"|format(aidat) }} TL</strong></p>
+        <form method="POST" action="{{ url_for('ayarlar.aidat_kaydet') }}" class="row g-3 align-items-end">
+            <div class="col-auto">
+                <label for="miktar" class="form-label">Yeni Miktar (TL)</label>
+                <input type="number" step="0.01" class="form-control" id="miktar" name="miktar" value="{{ "%.2f"|format(aidat) }}">
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-arrow-repeat"></i> Guncelle</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Daire Bilgileri -->
+<div class="card bg-dark border-secondary mb-4">
+    <div class="card-header border-secondary">
+        <h5 class="mb-0"><i class="bi bi-door-open"></i> Daire Bilgileri</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">Daire No</th>
+                        <th>Sakin Adi</th>
+                        <th>Telefon</th>
+                        <th style="width: 100px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for daire in daireler %}
+                    <tr>
+                        <form method="POST" action="{{ url_for('ayarlar.daire_kaydet', daire_id=daire.id) }}">
+                            <td class="align-middle"><strong>{{ daire.daire_no }}</strong></td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm" name="sakin_adi" value="{{ daire.sakin_adi or '' }}">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm" name="telefon" value="{{ daire.telefon or '' }}">
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-sm btn-outline-primary"><i class="bi bi-check-lg"></i> Kaydet</button>
+                            </td>
+                        </form>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Gider Kalemleri -->
+<div class="card bg-dark border-secondary mb-4">
+    <div class="card-header border-secondary">
+        <h5 class="mb-0"><i class="bi bi-tags"></i> Gider Kalemleri</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('ayarlar.gider_kalemi_ekle') }}" class="row g-3 align-items-end mb-4">
+            <div class="col-auto">
+                <label for="kalem_adi" class="form-label">Yeni Gider Kalemi</label>
+                <input type="text" class="form-control" id="kalem_adi" name="kalem_adi" placeholder="Kalem adi giriniz">
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-success"><i class="bi bi-plus-lg"></i> Ekle</button>
+            </div>
+        </form>
+        <div class="table-responsive">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>Kalem Adi</th>
+                        <th style="width: 120px;">Durum</th>
+                        <th style="width: 120px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for kalem in gider_kalemleri %}
+                    <tr>
+                        <td class="align-middle">{{ kalem.kalem_adi }}</td>
+                        <td class="align-middle">
+                            {% if kalem.aktif %}
+                                <span class="badge bg-success">Aktif</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Pasif</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form method="POST" action="{{ url_for('ayarlar.gider_kalemi_toggle', kalem_id=kalem.id) }}">
+                                {% if kalem.aktif %}
+                                    <button type="submit" class="btn btn-sm btn-outline-warning"><i class="bi bi-pause-circle"></i> Pasif Yap</button>
+                                {% else %}
+                                    <button type="submit" class="btn btn-sm btn-outline-success"><i class="bi bi-play-circle"></i> Aktif Yap</button>
+                                {% endif %}
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Mesaj Sablonu -->
+<div class="card bg-dark border-secondary mb-4">
+    <div class="card-header border-secondary">
+        <h5 class="mb-0"><i class="bi bi-chat-square-text"></i> Mesaj Sablonu</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('ayarlar.mesaj_sablonu_kaydet') }}">
+            <div class="mb-3">
+                <label for="mesaj_sablonu" class="form-label">Sablon Metni</label>
+                <textarea class="form-control" id="mesaj_sablonu" name="mesaj_sablonu" rows="6">{{ mesaj_sablonu }}</textarea>
+                <div class="form-text">
+                    Kullanilabilir degiskenler:
+                    <code>{apartman_adi}</code>,
+                    <code>{ay_yil}</code>,
+                    <code>{odemeyenler}</code>,
+                    <code>{borc_toplam}</code>,
+                    <code>{daire_no}</code>,
+                    <code>{sakin_adi}</code>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Kaydet</button>
+        </form>
+    </div>
+</div>
 {% endblock %}
