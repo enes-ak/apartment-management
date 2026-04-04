@@ -1,6 +1,7 @@
 venv/
 __pycache__/
 *.pyc
-apartman.db
-raporlar/
+*.db
+raporlar/*.xlsx
+raporlar/*.pdf
 .pytest_cache/
