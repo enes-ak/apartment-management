@@ -15,6 +15,9 @@ def create_app(config_class=None):
 
     init_db(app)
 
+    from routes import register_blueprints
+    register_blueprints(app)
+
     return app
 
 
