@@ -1,0 +1,18 @@
+<tr id="odeme-satir-{{ daire.id }}">
+    <td>{{ daire.daire_no }}</td>
+    <td>{{ daire.sakin_adi or '-' }}</td>
+    <td class="text-center">
+        <button class="odeme-btn {{ 'odendi' if odeme and odeme.odendi else 'odenmedi' }}"
+                hx-post="{{ url_for('odemeler.toggle', daire_id=daire.id, yil=yil, ay=ay) }}"
+                hx-target="#odeme-satir-{{ daire.id }}"
+                hx-swap="outerHTML">
+            {% if odeme and odeme.odendi %}
+                <i class="bi bi-check-circle-fill"></i>
+            {% else %}
+                <i class="bi bi-x-circle-fill"></i>
+            {% endif %}
+        </button>
+    </td>
+    <td>{% if odeme and odeme.odendi and odeme.odeme_tarihi %}{{ odeme.odeme_tarihi.strftime('%d.%m.%Y') }}{% else %}-{% endif %}</td>
+    <td><a href="{{ url_for('odemeler.daire_detay', daire_id=daire.id) }}" class="btn btn-sm btn-outline-info"><i class="bi bi-eye"></i></a></td>
+</tr>

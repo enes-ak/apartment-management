@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Daire {{ daire.daire_no }} - Apartman Yonetimi{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <a href="{{ url_for('odemeler.index') }}" class="btn btn-sm btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Odeme Takibine Don
+    </a>
+</div>
+
+<h1 class="mb-4"><i class="bi bi-door-open"></i> Daire {{ daire.daire_no }} - {{ daire.sakin_adi or 'Bos' }}</h1>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">Kat</h6>
+                <h3 class="card-title text-info">{{ daire.kat }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">Telefon</h6>
+                <h3 class="card-title" style="font-size: 1.2rem;">{{ daire.telefon or '-' }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">Odenmemis Aidat</h6>
+                <h3 class="card-title text-danger">{{ odenmeyen_sayisi }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">Odenmemis Tutar</h6>
+                <h3 class="card-title text-danger">{{ "%.0f"|format(odenmeyen_sayisi * aidat) }} TL</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Odeme Gecmisi</h5>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Donem</th>
+                    <th class="text-center">Durum</th>
+                    <th>Odeme Tarihi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for odeme in odemeler %}
+                <tr>
+                    <td>{{ ay_isimleri.get(odeme.ay, '') }} {{ odeme.yil }}</td>
+                    <td class="text-center">
+                        {% if odeme.odendi %}
+                            <span class="badge bg-success">Odendi</span>
+                        {% else %}
+                            <span class="badge bg-danger">Odenmedi</span>
+                        {% endif %}
+                    </td>
+                    <td>{% if odeme.odendi and odeme.odeme_tarihi %}{{ odeme.odeme_tarihi.strftime('%d.%m.%Y') }}{% else %}-{% endif %}</td>
+                </tr>
+                {% endfor %}
+                {% if not odemeler %}
+                <tr>
+                    <td colspan="3" class="text-center text-muted py-4">Henuz odeme kaydi bulunmuyor.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
