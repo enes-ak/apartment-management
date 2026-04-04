@@ -18,6 +18,14 @@ def create_app(config_class=None):
     from routes import register_blueprints
     register_blueprints(app)
 
+    @app.before_request
+    def mail_kontrol():
+        try:
+            from services.mail_servisi import aidat_hatirlatma_kontrol
+            aidat_hatirlatma_kontrol()
+        except Exception:
+            pass  # Mail hatasi uygulamayi durdurmasin
+
     return app
 
 

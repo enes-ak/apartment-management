@@ -75,6 +75,17 @@ def gider_kalemi_toggle(kalem_id):
     return redirect(url_for('ayarlar.index'))
 
 
+@bp.route('/test-mail', methods=['POST'])
+def test_mail():
+    from services.mail_servisi import mail_gonder
+    sonuc = mail_gonder('Test Mail - Apartman Yonetimi', 'Bu bir test mailidir. Mail ayarlariniz dogru calisiyor.')
+    if sonuc:
+        flash('Test maili basariyla gonderildi!', 'success')
+    else:
+        flash('Mail gonderilemedi. SMTP ayarlarinizi kontrol edin.', 'danger')
+    return redirect(url_for('ayarlar.index'))
+
+
 @bp.route('/mesaj-sablonu', methods=['POST'])
 def mesaj_sablonu_kaydet():
     sablon = request.form.get('mesaj_sablonu', '')

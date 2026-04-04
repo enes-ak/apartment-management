@@ -38,6 +38,11 @@
             </div>
             <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Kaydet</button>
         </form>
+        <form method="POST" action="{{ url_for('ayarlar.test_mail') }}" class="mt-2">
+            <button type="submit" class="btn btn-outline-info btn-sm">
+                <i class="bi bi-envelope"></i> Test Mail Gonder
+            </button>
+        </form>
     </div>
 </div>
 
