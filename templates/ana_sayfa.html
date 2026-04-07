@@ -3,102 +3,96 @@
 {% block title %}Ana Sayfa - Apartman Yonetimi{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">{{ ay_adi }} {{ yil }} Ozeti</h1>
+<h2 class="page-title"><i class="bi bi-grid-1x2"></i> {{ yil }} Genel Durum</h2>
 
-<!-- Summary Cards -->
 <div class="row g-3 mb-4">
     <div class="col-md-3">
-        <div class="card bg-dark border-secondary ozet-kart h-100">
-            <div class="card-body text-center">
-                <h6 class="card-subtitle mb-2 text-muted">Aidat Miktari</h6>
-                <h3 class="card-title">{{ "%.2f"|format(aidat) }} TL</h3>
-            </div>
+        <div class="stat-card accent-green">
+            <div class="stat-label">Toplam Gelir</div>
+            <div class="stat-value text-accent-green">{{ "{:,.0f}".format(toplam_gelir) }} <small style="font-size:0.6em">TL</small></div>
+            <div class="stat-sub">{{ odenen_toplam }} aidat odendi</div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card bg-dark border-secondary ozet-kart h-100">
-            <div class="card-body text-center">
-                <h6 class="card-subtitle mb-2 text-muted">Tahsilat</h6>
-                <h3 class="card-title text-success">{{ odenen }}/{{ toplam_daire }}</h3>
-                <p class="text-success mb-0">{{ "%.2f"|format(odenen * aidat) }} TL</p>
-            </div>
+        <div class="stat-card accent-red">
+            <div class="stat-label">Toplam Gider</div>
+            <div class="stat-value text-accent-red">{{ "{:,.0f}".format(toplam_gider) }} <small style="font-size:0.6em">TL</small></div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card bg-dark border-secondary ozet-kart h-100">
-            <div class="card-body text-center">
-                <h6 class="card-subtitle mb-2 text-muted">Toplam Gider</h6>
-                <h3 class="card-title text-danger">{{ "%.2f"|format(toplam_gider) }} TL</h3>
-            </div>
+        <div class="stat-card accent-purple">
+            <div class="stat-label">Kasa Bakiye</div>
+            <div class="stat-value {% if bakiye >= 0 %}text-accent-purple{% else %}text-accent-red{% endif %}">{{ "{:,.0f}".format(bakiye) }} <small style="font-size:0.6em">TL</small></div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card bg-dark border-secondary ozet-kart h-100">
-            <div class="card-body text-center">
-                <h6 class="card-subtitle mb-2 text-muted">Kasa Bakiye</h6>
-                <h3 class="card-title">
-                    {% if kasa %}
-                        {{ "%.2f"|format(kasa.bakiye) }} TL
-                    {% else %}
-                        0.00 TL
-                    {% endif %}
-                </h3>
-            </div>
+        <div class="stat-card accent-orange">
+            <div class="stat-label">Aylik Aidat</div>
+            <div class="stat-value text-accent-orange">{{ "%.0f"|format(aidat) }} <small style="font-size:0.6em">TL</small></div>
+            <div class="stat-sub">{{ toplam_daire }} daire</div>
         </div>
     </div>
 </div>
 
-<!-- Unpaid Apartments Warning -->
-{% if odemeyenler %}
-<div class="card border-warning bg-dark mb-4">
-    <div class="card-body">
-        <h5 class="card-title text-warning">
-            <i class="bi bi-exclamation-triangle"></i> Aidat Odemeyenler ({{ odemeyenler|length }})
-        </h5>
-        <div class="row g-2">
-            {% for daire in odemeyenler %}
-            <div class="col-auto">
-                <span class="badge bg-warning text-dark">{{ daire.daire_no }}</span>
-                <small class="text-muted">{{ daire.sakin_adi }}</small>
-            </div>
-            {% endfor %}
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card accent-blue">
+            <div class="stat-label">Yillik Tahsilat</div>
+            <div class="stat-value text-accent-blue">%{{ "%.0f"|format(tahsilat_yillik) }}</div>
+            <div class="stat-sub">{{ "{:,.0f}".format(beklenen_yillik) }} TL beklenen (12 ay)</div>
         </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card accent-cyan">
+            <div class="stat-label">Guncel Tahsilat ({{ ay_sayisi }} ay)</div>
+            <div class="stat-value text-accent-cyan">%{{ "%.0f"|format(tahsilat_guncel) }}</div>
+            <div class="stat-sub">{{ "{:,.0f}".format(beklenen_guncel) }} TL beklenen</div>
+        </div>
+    </div>
+</div>
+
+{% if odemeyenler %}
+<div class="warning-section mb-4">
+    <div class="warning-title">
+        <i class="bi bi-exclamation-triangle-fill"></i> Gecikmis Aidati Olan Daireler ({{ odemeyenler|length }})
+    </div>
+    <div class="d-flex flex-wrap gap-3">
+        {% for item in odemeyenler %}
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-danger">{{ item.daire.daire_no }}</span>
+            <span style="font-size:0.82rem; color:var(--text-secondary)">{{ item.daire.sakin_adi or '-' }}</span>
+            <span style="font-size:0.75rem; color:var(--accent-red)">{{ item.gecikmis_ay }} ay</span>
+        </div>
+        {% endfor %}
     </div>
 </div>
 {% endif %}
 
-<!-- Quick Access Cards -->
 <div class="row g-3">
     <div class="col-md-4">
-        <a href="{{ url_for('odemeler.index') }}" class="text-decoration-none">
-            <div class="card bg-dark border-secondary h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-cash-stack fs-1 text-success"></i>
-                    <h5 class="card-title mt-2">Odeme Takibi</h5>
-                    <p class="card-text text-muted">Aidat odemelerini goruntuleyin ve yonetin.</p>
-                </div>
+        <a href="{{ url_for('odemeler.index') }}" class="quick-card">
+            <div class="quick-icon bg-accent-green"><i class="bi bi-wallet2 text-accent-green"></i></div>
+            <div>
+                <div class="quick-title" style="color:var(--text-primary)">Odeme Takibi</div>
+                <div class="quick-desc">Aidat odemelerini yonet</div>
             </div>
         </a>
     </div>
     <div class="col-md-4">
-        <a href="{{ url_for('mesajlar.index') }}" class="text-decoration-none">
-            <div class="card bg-dark border-secondary h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-chat-dots fs-1 text-info"></i>
-                    <h5 class="card-title mt-2">Mesaj Hazirla</h5>
-                    <p class="card-text text-muted">Sakinlere bildirim ve hatirlatma gonderin.</p>
-                </div>
+        <a href="{{ url_for('mesajlar.index') }}" class="quick-card">
+            <div class="quick-icon bg-accent-blue"><i class="bi bi-chat-square-text text-accent-blue"></i></div>
+            <div>
+                <div class="quick-title" style="color:var(--text-primary)">Mesaj Hazirla</div>
+                <div class="quick-desc">Odemeyenlere bildirim gonder</div>
             </div>
         </a>
     </div>
     <div class="col-md-4">
-        <a href="{{ url_for('raporlar.index') }}" class="text-decoration-none">
-            <div class="card bg-dark border-secondary h-100">
-                <div class="card-body text-center">
-                    <i class="bi bi-file-earmark-bar-graph fs-1 text-warning"></i>
-                    <h5 class="card-title mt-2">Raporlar</h5>
-                    <p class="card-text text-muted">Aylik ve yillik raporlari indirin.</p>
-                </div>
+        <a href="{{ url_for('raporlar.index') }}" class="quick-card">
+            <div class="quick-icon bg-accent-yellow"><i class="bi bi-bar-chart-line text-accent-yellow"></i></div>
+            <div>
+                <div class="quick-title" style="color:var(--text-primary)">Raporlar</div>
+                <div class="quick-desc">Excel ve PDF raporlar olustur</div>
             </div>
         </a>
     </div>

@@ -9,75 +9,80 @@
     </a>
 </div>
 
-<h1 class="mb-4"><i class="bi bi-door-open"></i> Daire {{ daire.daire_no }} - {{ daire.sakin_adi or 'Bos' }}</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="page-title mb-0"><i class="bi bi-door-open"></i> Daire {{ daire.daire_no }} - {{ daire.sakin_adi or 'Bos' }}</h2>
+    <form method="GET" class="d-flex gap-2 align-items-center">
+        <select name="yil" class="form-select form-select-sm" style="width:auto" onchange="this.form.submit()">
+            {% for y in range(2026, yil + 3) %}
+            <option value="{{ y }}" {% if y == yil %}selected{% endif %}>{{ y }}</option>
+            {% endfor %}
+        </select>
+    </form>
+</div>
 
 <div class="row g-3 mb-4">
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h6 class="card-subtitle mb-2 text-muted">Kat</h6>
-                <h3 class="card-title text-info">{{ daire.kat }}</h3>
-            </div>
+    <div class="col">
+        <div class="stat-card accent-blue">
+            <div class="stat-label">Kat</div>
+            <div class="stat-value text-accent-blue">{{ 'Giris' if daire.kat == 0 else daire.kat }}</div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h6 class="card-subtitle mb-2 text-muted">Telefon</h6>
-                <h3 class="card-title" style="font-size: 1.2rem;">{{ daire.telefon or '-' }}</h3>
-            </div>
+    <div class="col">
+        <div class="stat-card accent-purple">
+            <div class="stat-label">Yillik Toplam</div>
+            <div class="stat-value text-accent-purple">{{ "%.0f"|format(yillik_toplam) }} <small style="font-size:0.6em">TL</small></div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h6 class="card-subtitle mb-2 text-muted">Odenmemis Aidat</h6>
-                <h3 class="card-title text-danger">{{ odenmeyen_sayisi }}</h3>
-            </div>
+    <div class="col">
+        <div class="stat-card accent-green">
+            <div class="stat-label">Odenen</div>
+            <div class="stat-value text-accent-green">{{ odenen_sayisi }} <small style="font-size:0.6em">ay</small></div>
+            <div class="stat-sub">{{ "%.0f"|format(odenen_tutar) }} TL</div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h6 class="card-subtitle mb-2 text-muted">Odenmemis Tutar</h6>
-                <h3 class="card-title text-danger">{{ "%.0f"|format(odenmeyen_sayisi * aidat) }} TL</h3>
-            </div>
+    <div class="col">
+        <div class="stat-card accent-yellow">
+            <div class="stat-label">Kalan</div>
+            <div class="stat-value text-accent-yellow">{{ odenmeyen_sayisi }} <small style="font-size:0.6em">ay</small></div>
+            <div class="stat-sub">{{ "%.0f"|format(kalan_tutar) }} TL</div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="stat-card accent-red">
+            <div class="stat-label">Gecikmis</div>
+            <div class="stat-value text-accent-red">{{ gecikmis_sayisi }} <small style="font-size:0.6em">ay</small></div>
+            <div class="stat-sub">{{ "%.0f"|format(gecikmis_tutar) }} TL</div>
         </div>
     </div>
 </div>
 
 <div class="card">
-    <div class="card-header">
-        <h5 class="mb-0">Odeme Gecmisi</h5>
-    </div>
+    <div class="card-header">{{ yil }} - Aylik Odeme Durumu</div>
     <div class="card-body p-0">
-        <table class="table table-hover mb-0">
+        <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Donem</th>
+                    <th>Ay</th>
                     <th class="text-center">Durum</th>
                     <th>Odeme Tarihi</th>
                 </tr>
             </thead>
             <tbody>
-                {% for odeme in odemeler %}
-                <tr>
-                    <td>{{ ay_isimleri.get(odeme.ay, '') }} {{ odeme.yil }}</td>
+                {% for durum in aylik_durum %}
+                <tr class="{% if durum.gecikmis %}table-danger{% endif %}">
+                    <td>{{ durum.ay_adi }}</td>
                     <td class="text-center">
-                        {% if odeme.odendi %}
+                        {% if durum.odendi %}
                             <span class="badge bg-success">Odendi</span>
+                        {% elif durum.gecikmis %}
+                            <span class="badge bg-danger">Gecikmis</span>
                         {% else %}
-                            <span class="badge bg-danger">Odenmedi</span>
+                            <span class="badge bg-secondary">Bekleniyor</span>
                         {% endif %}
                     </td>
-                    <td>{% if odeme.odendi and odeme.odeme_tarihi %}{{ odeme.odeme_tarihi.strftime('%d.%m.%Y') }}{% else %}-{% endif %}</td>
+                    <td>{% if durum.odeme_tarihi %}{{ durum.odeme_tarihi.strftime('%d.%m.%Y') }}{% else %}<span style="color:var(--text-muted)">-</span>{% endif %}</td>
                 </tr>
                 {% endfor %}
-                {% if not odemeler %}
-                <tr>
-                    <td colspan="3" class="text-center text-muted py-4">Henuz odeme kaydi bulunmuyor.</td>
-                </tr>
-                {% endif %}
             </tbody>
         </table>
     </div>

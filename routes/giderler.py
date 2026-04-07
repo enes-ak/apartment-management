@@ -1,7 +1,8 @@
 from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from database import db
-from models import GiderKalemi, Gider
+from models import GiderKalemi, Gider, Log
+from services.kasa_servisi import kasa_hesapla
 
 bp = Blueprint('giderler', __name__, url_prefix='/giderler')
 
@@ -34,6 +35,8 @@ def ekle():
     gider = Gider(kalem_id=kalem_id, yil=yil, ay=ay, tutar=tutar, aciklama=aciklama)
     db.session.add(gider)
     db.session.commit()
+    kasa_hesapla(yil, ay)
+    Log.kaydet(f'Gider eklendi: {gider.kalem.kalem_adi} - {tutar:.2f} TL ({AY_ISIMLERI[ay]} {yil})')
     flash('Gider eklendi.', 'success')
     return redirect(url_for('giderler.index', yil=yil, ay=ay))
 
@@ -42,7 +45,11 @@ def ekle():
 def sil(gider_id):
     gider = Gider.query.get_or_404(gider_id)
     yil, ay = gider.yil, gider.ay
+    kalem_adi = gider.kalem.kalem_adi
+    tutar = gider.tutar
     db.session.delete(gider)
     db.session.commit()
+    kasa_hesapla(yil, ay)
+    Log.kaydet(f'Gider silindi: {kalem_adi} - {tutar:.2f} TL ({AY_ISIMLERI[ay]} {yil})')
     flash('Gider silindi.', 'success')
     return redirect(url_for('giderler.index', yil=yil, ay=ay))

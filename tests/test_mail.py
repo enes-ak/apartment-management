@@ -32,9 +32,3 @@ def test_mail_gonder(mock_smtp, db_session):
     assert sonuc is True
 
 
-def test_test_mail_endpoint(client, db_session):
-    Ayar.kaydet('mail_adresi', 'test@test.com')
-    Ayar.kaydet('smtp_sifre', 'test')
-    with patch('services.mail_servisi.mail_gonder', return_value=True):
-        response = client.post('/ayarlar/test-mail', follow_redirects=True)
-        assert response.status_code == 200

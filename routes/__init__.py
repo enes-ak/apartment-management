@@ -6,6 +6,9 @@ def register_blueprints(app):
     from routes.mesajlar import bp as mesajlar_bp
     from routes.raporlar import bp as raporlar_bp
     from routes.ayarlar import bp as ayarlar_bp
+    from routes.loglar import bp as loglar_bp
+    from routes.notlar import bp as notlar_bp
+    from routes.rehber import bp as rehber_bp
 
     app.register_blueprint(ana_sayfa_bp)
     app.register_blueprint(odemeler_bp)
@@ -13,4 +16,7 @@ def register_blueprints(app):
     app.register_blueprint(kasa_bp)
     app.register_blueprint(mesajlar_bp)
     app.register_blueprint(raporlar_bp)
+    app.register_blueprint(notlar_bp)
+    app.register_blueprint(rehber_bp)
     app.register_blueprint(ayarlar_bp)
+    app.register_blueprint(loglar_bp)

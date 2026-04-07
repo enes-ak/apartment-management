@@ -36,7 +36,7 @@ class AidatAyari(db.Model):
         from datetime import date
         ayar = AidatAyari.query.filter(
             AidatAyari.gecerlilik_tarihi <= date.today()
-        ).order_by(AidatAyari.gecerlilik_tarihi.desc()).first()
+        ).order_by(AidatAyari.gecerlilik_tarihi.desc(), AidatAyari.id.desc()).first()
         return ayar.miktar if ayar else 0
 
 

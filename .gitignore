@@ -5,3 +5,4 @@ __pycache__/
 raporlar/*.xlsx
 raporlar/*.pdf
 .pytest_cache/
+yedekler/

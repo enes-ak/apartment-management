@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block title %}Rehber - Apartman Yonetimi{% endblock %}
+
+{% block content %}
+<h2 class="page-title mb-0"><i class="bi bi-person-rolodex"></i> Rehber</h2>
+<p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:1.5rem;">Gorevliler, abonelikler ve apartman bilgileri</p>
+
+<div class="row g-4">
+    <!-- Gorevliler -->
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0"><i class="bi bi-people"></i> Gorevliler</h6>
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#gorevliEkleModal">
+                    <i class="bi bi-plus-lg"></i> Ekle
+                </button>
+            </div>
+            <div class="card-body p-0">
+                {% if gorevliler %}
+                <div class="rehber-liste">
+                    {% for g in gorevliler %}
+                    <div class="rehber-item">
+                        <div class="rehber-item-info">
+                            <div class="rehber-item-baslik">{{ g.baslik }}</div>
+                            {% if g.deger %}
+                            <div class="rehber-item-deger">{{ g.deger }}</div>
+                            {% endif %}
+                            {% if g.telefon %}
+                            <div class="rehber-item-telefon"><i class="bi bi-telephone"></i> {{ g.telefon }}</div>
+                            {% endif %}
+                            {% if g.iban %}
+                            <div class="rehber-item-iban"><i class="bi bi-bank"></i> {{ g.iban }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="rehber-item-actions">
+                            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#duzenleModal{{ g.id }}">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <form method="POST" action="{{ url_for('rehber.sil', kayit_id=g.id) }}" style="display:inline"
+                                  onsubmit="return confirm('{{ g.baslik }} silinsin mi?')">
+                                <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash3"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="rehber-bos">
+                    <i class="bi bi-people"></i>
+                    <p>Henuz gorevli eklenmemis.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Abonelikler -->
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0"><i class="bi bi-lightning-charge"></i> Abonelikler</h6>
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#abonelikEkleModal">
+                    <i class="bi bi-plus-lg"></i> Ekle
+                </button>
+            </div>
+            <div class="card-body p-0">
+                {% if abonelikler %}
+                <div class="rehber-liste">
+                    {% for a in abonelikler %}
+                    <div class="rehber-item">
+                        <div class="rehber-item-info">
+                            <div class="rehber-item-baslik">{{ a.baslik }}</div>
+                            {% if a.deger %}
+                            <div class="rehber-item-abone-no"><i class="bi bi-hash"></i> {{ a.deger }}</div>
+                            {% endif %}
+                            {% if a.telefon %}
+                            <div class="rehber-item-telefon"><i class="bi bi-telephone"></i> {{ a.telefon }}</div>
+                            {% endif %}
+                            {% if a.iban %}
+                            <div class="rehber-item-iban"><i class="bi bi-bank"></i> {{ a.iban }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="rehber-item-actions">
+                            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#duzenleModal{{ a.id }}">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <form method="POST" action="{{ url_for('rehber.sil', kayit_id=a.id) }}" style="display:inline"
+                                  onsubmit="return confirm('{{ a.baslik }} silinsin mi?')">
+                                <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash3"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="rehber-bos">
+                    <i class="bi bi-lightning-charge"></i>
+                    <p>Henuz abonelik eklenmemis.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Apartman Bilgileri -->
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0"><i class="bi bi-info-circle"></i> Apartman Bilgileri</h6>
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#bilgiEkleModal">
+                    <i class="bi bi-plus-lg"></i> Ekle
+                </button>
+            </div>
+            <div class="card-body p-0">
+                {% if bilgiler %}
+                <div class="rehber-liste">
+                    {% for b in bilgiler %}
+                    <div class="rehber-item">
+                        <div class="rehber-item-info">
+                            <div class="rehber-item-baslik">{{ b.baslik }}</div>
+                            {% if b.deger %}
+                            <div class="rehber-item-deger">{{ b.deger }}</div>
+                            {% endif %}
+                            {% if b.telefon %}
+                            <div class="rehber-item-telefon"><i class="bi bi-telephone"></i> {{ b.telefon }}</div>
+                            {% endif %}
+                            {% if b.iban %}
+                            <div class="rehber-item-iban"><i class="bi bi-bank"></i> {{ b.iban }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="rehber-item-actions">
+                            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#duzenleModal{{ b.id }}">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <form method="POST" action="{{ url_for('rehber.sil', kayit_id=b.id) }}" style="display:inline"
+                                  onsubmit="return confirm('{{ b.baslik }} silinsin mi?')">
+                                <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash3"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="rehber-bos">
+                    <i class="bi bi-info-circle"></i>
+                    <p>Henuz bilgi eklenmemis.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Gorevli Ekle Modal -->
+<div class="modal fade" id="gorevliEkleModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" action="{{ url_for('rehber.ekle') }}">
+                <input type="hidden" name="kategori" value="gorevli">
+                <div class="modal-header">
+                    <h6 class="modal-title"><i class="bi bi-person-plus"></i> Gorevli Ekle</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Gorev</label>
+                        <input type="text" class="form-control" name="baslik" placeholder="Orn: Asansorcu, Temizlikci" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Ad Soyad</label>
+                        <input type="text" class="form-control" name="deger" placeholder="Orn: Ali Yilmaz">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Telefon</label>
+                        <input type="text" class="form-control" name="telefon" placeholder="Orn: 0555 123 45 67">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">IBAN (Opsiyonel)</label>
+                        <input type="text" class="form-control" name="iban" placeholder="Orn: TR00 0000 0000 0000 0000 0000 00">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Iptal</button>
+                    <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-check-lg"></i> Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Abonelik Ekle Modal -->
+<div class="modal fade" id="abonelikEkleModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" action="{{ url_for('rehber.ekle') }}">
+                <input type="hidden" name="kategori" value="abonelik">
+                <div class="modal-header">
+                    <h6 class="modal-title"><i class="bi bi-lightning-charge"></i> Abonelik Ekle</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Abonelik Adi</label>
+                        <input type="text" class="form-control" name="baslik" placeholder="Orn: Elektrik, Su, Dogalgaz" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Abone / Sayac No</label>
+                        <input type="text" class="form-control" name="deger" placeholder="Orn: 1234567890">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Iptal</button>
+                    <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-check-lg"></i> Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Bilgi Ekle Modal -->
+<div class="modal fade" id="bilgiEkleModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" action="{{ url_for('rehber.ekle') }}">
+                <input type="hidden" name="kategori" value="bilgi">
+                <div class="modal-header">
+                    <h6 class="modal-title"><i class="bi bi-plus-circle"></i> Bilgi Ekle</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Baslik</label>
+                        <input type="text" class="form-control" name="baslik" placeholder="Orn: Apartman Adresi" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Detay</label>
+                        <input type="text" class="form-control" name="deger" placeholder="Orn: Adres bilgisi...">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Telefon (Opsiyonel)</label>
+                        <input type="text" class="form-control" name="telefon" placeholder="Varsa ilgili telefon numarasi">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">IBAN (Opsiyonel)</label>
+                        <input type="text" class="form-control" name="iban" placeholder="Orn: TR00 0000 0000 0000 0000 0000 00">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Iptal</button>
+                    <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-check-lg"></i> Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Duzenleme Modallari -->
+{% for item in gorevliler + abonelikler + bilgiler %}
+<div class="modal fade" id="duzenleModal{{ item.id }}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" action="{{ url_for('rehber.guncelle', kayit_id=item.id) }}">
+                <div class="modal-header">
+                    <h6 class="modal-title"><i class="bi bi-pencil"></i> Duzenle</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">{{ {'gorevli': 'Gorev', 'abonelik': 'Abonelik Adi', 'bilgi': 'Baslik'}[item.kategori] }}</label>
+                        <input type="text" class="form-control" name="baslik" value="{{ item.baslik }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ {'gorevli': 'Ad Soyad', 'abonelik': 'Abone / Sayac No', 'bilgi': 'Detay'}[item.kategori] }}</label>
+                        <input type="text" class="form-control" name="deger" value="{{ item.deger }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Telefon</label>
+                        <input type="text" class="form-control" name="telefon" value="{{ item.telefon }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">IBAN</label>
+                        <input type="text" class="form-control" name="iban" value="{{ item.iban }}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Iptal</button>
+                    <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-check-lg"></i> Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

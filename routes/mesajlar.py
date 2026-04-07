@@ -26,18 +26,20 @@ def olustur():
     ay_yil = f'{AY_ISIMLERI[ay]} {yil}'
 
     if tur == 'genel':
+        # Genel hatirlatma: tum daireleri listele
         daireler = Daire.query.order_by(Daire.daire_no).all()
-        odemeyenler_metni = '(Genel hatirlatma - tum daireler)'
     else:
+        # Sadece odemeyenler
         odenen_idler = {o.daire_id for o in Odeme.query.filter_by(yil=yil, ay=ay, odendi=True).all()}
         if odenen_idler:
             daireler = Daire.query.filter(~Daire.id.in_(odenen_idler)).order_by(Daire.daire_no).all()
         else:
             daireler = Daire.query.order_by(Daire.daire_no).all()
-        satirlar = []
-        for d in daireler:
-            satirlar.append(f'- Daire {d.daire_no} - {d.sakin_adi or "Bilinmiyor"}')
-        odemeyenler_metni = '\n'.join(satirlar)
+
+    satirlar = []
+    for d in daireler:
+        satirlar.append(f'- Daire {d.daire_no}')
+    odemeyenler_metni = '\n'.join(satirlar) if satirlar else '- Herkes odemis!'
 
     mesaj = sablon.format(
         apartman_adi=apartman_adi,

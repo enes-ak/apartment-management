@@ -14,5 +14,13 @@
         </button>
     </td>
     <td>{% if odeme and odeme.odendi and odeme.odeme_tarihi %}{{ odeme.odeme_tarihi.strftime('%d.%m.%Y') }}{% else %}-{% endif %}</td>
-    <td><a href="{{ url_for('odemeler.daire_detay', daire_id=daire.id) }}" class="btn btn-sm btn-outline-info"><i class="bi bi-eye"></i></a></td>
+    <td>
+        <a href="{{ url_for('odemeler.daire_detay', daire_id=daire.id) }}" class="btn btn-sm btn-outline-info"><i class="bi bi-eye"></i></a>
+        <button class="btn btn-sm btn-outline-warning" title="Toplu odeme" data-bs-toggle="modal" data-bs-target="#topluModal{{ daire.id }}">
+            <i class="bi bi-calendar-check"></i>
+        </button>
+        <a href="{{ url_for('odemeler.daire_rapor', daire_id=daire.id, yil=yil) }}" class="btn btn-sm btn-outline-success" title="Daire raporu">
+            <i class="bi bi-file-earmark-pdf"></i>
+        </a>
+    </td>
 </tr>

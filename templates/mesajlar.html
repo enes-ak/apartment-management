@@ -3,40 +3,34 @@
 {% block title %}Mesaj Hazirla - Apartman Yonetimi{% endblock %}
 
 {% block content %}
-<h1 class="mb-4"><i class="bi bi-chat-dots"></i> Mesaj Hazirla</h1>
+<h2 class="page-title"><i class="bi bi-chat-square-text"></i> Mesaj Hazirla</h2>
 
 <div class="card mb-4">
     <div class="card-body">
         <div class="row g-3 align-items-end">
             <div class="col-auto">
-                <label for="ay-sec" class="form-label">Ay</label>
-                <select id="ay-sec" class="form-select">
+                <label class="form-label">Ay</label>
+                <select id="mesaj-ay" class="form-select form-select-sm" style="width:auto">
                     {% for num, isim in ay_isimleri.items() %}
                     <option value="{{ num }}" {% if num == ay %}selected{% endif %}>{{ isim }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="col-auto">
-                <label for="yil-sec" class="form-label">Yil</label>
-                <select id="yil-sec" class="form-select">
-                    {% for y in range(yil - 2, yil + 2) %}
+                <label class="form-label">Yil</label>
+                <select id="mesaj-yil" class="form-select form-select-sm" style="width:auto">
+                    {% for y in range(2026, yil + 2) %}
                     <option value="{{ y }}" {% if y == yil %}selected{% endif %}>{{ y }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="col-auto">
-                <button class="btn btn-warning"
-                        onclick="this.setAttribute('hx-get', '/mesajlar/olustur?yil=' + document.getElementById('yil-sec').value + '&ay=' + document.getElementById('ay-sec').value + '&tur=odemeyenler'); htmx.process(this); htmx.trigger(this, 'click')"
-                        hx-target="#mesaj-sonuc"
-                        hx-swap="innerHTML">
+                <button class="btn btn-warning btn-sm" onclick="mesajOlustur('odemeyenler')">
                     <i class="bi bi-exclamation-triangle"></i> Odemeyenlere Mesaj
                 </button>
             </div>
             <div class="col-auto">
-                <button class="btn btn-info"
-                        onclick="this.setAttribute('hx-get', '/mesajlar/olustur?yil=' + document.getElementById('yil-sec').value + '&ay=' + document.getElementById('ay-sec').value + '&tur=genel'); htmx.process(this); htmx.trigger(this, 'click')"
-                        hx-target="#mesaj-sonuc"
-                        hx-swap="innerHTML">
+                <button class="btn btn-info btn-sm" onclick="mesajOlustur('genel')">
                     <i class="bi bi-megaphone"></i> Genel Hatirlatma
                 </button>
             </div>
@@ -45,6 +39,20 @@
 </div>
 
 <div id="mesaj-sonuc">
-    <p class="text-muted">Mesaj olusturmak icin yukaridaki butonlardan birini secin.</p>
+    <div class="text-center py-5" style="color:var(--text-muted)">
+        <i class="bi bi-chat-left-text" style="font-size:2.5rem"></i>
+        <p class="mt-2 mb-0">Mesaj olusturmak icin yukaridaki butonlardan birini secin.</p>
+    </div>
 </div>
+
+<script>
+function mesajOlustur(tur) {
+    const ay = document.getElementById('mesaj-ay').value;
+    const yil = document.getElementById('mesaj-yil').value;
+    const url = `/mesajlar/olustur?yil=${yil}&ay=${ay}&tur=${tur}`;
+    fetch(url).then(r => r.text()).then(html => {
+        document.getElementById('mesaj-sonuc').innerHTML = html;
+    });
+}
+</script>
 {% endblock %}

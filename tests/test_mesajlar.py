@@ -20,5 +20,5 @@ def test_mesaj_olustur_kismi_odeme(client, db_session):
     _db.session.commit()
     response = client.get('/mesajlar/olustur?yil=2026&ay=4')
     assert response.status_code == 200
-    assert 'Daire 1 -'.encode() not in response.data
-    assert 'Daire 2 -'.encode() in response.data
+    assert b'Daire 1\n' not in response.data
+    assert 'Daire 2'.encode() in response.data

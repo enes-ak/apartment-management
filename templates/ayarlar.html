@@ -3,181 +3,246 @@
 {% block title %}Ayarlar - Apartman Yonetimi{% endblock %}
 
 {% block content %}
-<h1 class="mb-4"><i class="bi bi-gear"></i> Ayarlar</h1>
+<h2 class="page-title"><i class="bi bi-gear"></i> Ayarlar</h2>
 
 <!-- Genel Ayarlar -->
-<div class="card bg-dark border-secondary mb-4">
-    <div class="card-header border-secondary">
-        <h5 class="mb-0"><i class="bi bi-sliders"></i> Genel Ayarlar</h5>
-    </div>
+<div class="card mb-4">
+    <div class="card-header"><i class="bi bi-sliders"></i> Genel Ayarlar</div>
     <div class="card-body">
         <form method="POST" action="{{ url_for('ayarlar.genel_kaydet') }}">
-            <div class="row mb-3">
+            <div class="row g-3 mb-3">
                 <div class="col-md-6">
-                    <label for="apartman_adi" class="form-label">Apartman Adi</label>
-                    <input type="text" class="form-control" id="apartman_adi" name="apartman_adi" value="{{ apartman_adi }}">
-                </div>
-                <div class="col-md-6">
-                    <label for="mail_adresi" class="form-label">E-posta Adresi</label>
-                    <input type="email" class="form-control" id="mail_adresi" name="mail_adresi" value="{{ mail_adresi }}">
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label for="smtp_sunucu" class="form-label">SMTP Sunucu</label>
-                    <input type="text" class="form-control" id="smtp_sunucu" name="smtp_sunucu" value="{{ smtp_sunucu }}">
-                </div>
-                <div class="col-md-4">
-                    <label for="smtp_port" class="form-label">SMTP Port</label>
-                    <input type="text" class="form-control" id="smtp_port" name="smtp_port" value="{{ smtp_port }}">
-                </div>
-                <div class="col-md-4">
-                    <label for="smtp_sifre" class="form-label">SMTP Sifre</label>
-                    <input type="password" class="form-control" id="smtp_sifre" name="smtp_sifre" value="{{ smtp_sifre }}">
+                    <label class="form-label">Apartman Adi</label>
+                    <input type="text" class="form-control" name="apartman_adi" value="{{ apartman_adi }}">
                 </div>
             </div>
             <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Kaydet</button>
-        </form>
-        <form method="POST" action="{{ url_for('ayarlar.test_mail') }}" class="mt-2">
-            <button type="submit" class="btn btn-outline-info btn-sm">
-                <i class="bi bi-envelope"></i> Test Mail Gonder
-            </button>
         </form>
     </div>
 </div>
 
 <!-- Aidat Miktari -->
-<div class="card bg-dark border-secondary mb-4">
-    <div class="card-header border-secondary">
-        <h5 class="mb-0"><i class="bi bi-cash-coin"></i> Aidat Miktari</h5>
-    </div>
+<div class="card mb-4">
+    <div class="card-header"><i class="bi bi-cash-coin"></i> Aidat Miktari</div>
     <div class="card-body">
-        <p>Guncel aidat miktari: <strong>{{ "%.2f"|format(aidat) }} TL</strong></p>
-        <form method="POST" action="{{ url_for('ayarlar.aidat_kaydet') }}" class="row g-3 align-items-end">
-            <div class="col-auto">
-                <label for="miktar" class="form-label">Yeni Miktar (TL)</label>
-                <input type="number" step="0.01" class="form-control" id="miktar" name="miktar" value="{{ "%.2f"|format(aidat) }}">
+        <p style="color:var(--text-secondary); font-size:0.85rem">Guncel aidat miktari: <strong style="color:var(--accent-blue)">{{ "%.2f"|format(aidat) }} TL</strong></p>
+        <form method="POST" action="{{ url_for('ayarlar.aidat_kaydet') }}" class="d-flex gap-2 align-items-end">
+            <div>
+                <label class="form-label">Yeni Miktar (TL)</label>
+                <input type="number" step="0.01" class="form-control" name="miktar" value="{{ "%.2f"|format(aidat) }}" style="width:180px">
             </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-primary"><i class="bi bi-arrow-repeat"></i> Guncelle</button>
-            </div>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-arrow-repeat"></i> Guncelle</button>
         </form>
     </div>
 </div>
 
 <!-- Daire Bilgileri -->
-<div class="card bg-dark border-secondary mb-4">
-    <div class="card-header border-secondary">
-        <h5 class="mb-0"><i class="bi bi-door-open"></i> Daire Bilgileri</h5>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-dark table-hover">
-                <thead>
-                    <tr>
-                        <th style="width: 80px;">Daire No</th>
-                        <th>Sakin Adi</th>
-                        <th>Telefon</th>
-                        <th style="width: 100px;"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for daire in daireler %}
-                    <tr>
-                        <form method="POST" action="{{ url_for('ayarlar.daire_kaydet', daire_id=daire.id) }}">
-                            <td class="align-middle"><strong>{{ daire.daire_no }}</strong></td>
-                            <td>
-                                <input type="text" class="form-control form-control-sm" name="sakin_adi" value="{{ daire.sakin_adi or '' }}">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control form-control-sm" name="telefon" value="{{ daire.telefon or '' }}">
-                            </td>
-                            <td>
-                                <button type="submit" class="btn btn-sm btn-outline-primary"><i class="bi bi-check-lg"></i> Kaydet</button>
-                            </td>
-                        </form>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+<div class="card mb-4">
+    <div class="card-header"><i class="bi bi-door-open"></i> Daire Bilgileri</div>
+    <div class="card-body p-0">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th style="width:80px">Daire</th>
+                    <th>Sakin Adi</th>
+                    <th>Telefon</th>
+                    <th style="width:90px"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for daire in daireler %}
+                <tr>
+                    <form method="POST" action="{{ url_for('ayarlar.daire_kaydet', daire_id=daire.id) }}">
+                        <td class="align-middle" style="font-weight:600">{{ daire.daire_no }}</td>
+                        <td><input type="text" class="form-control form-control-sm" name="sakin_adi" value="{{ daire.sakin_adi or '' }}"></td>
+                        <td><input type="text" class="form-control form-control-sm" name="telefon" value="{{ daire.telefon or '' }}"></td>
+                        <td><button type="submit" class="btn btn-sm btn-outline-primary"><i class="bi bi-check-lg"></i></button></td>
+                    </form>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 
 <!-- Gider Kalemleri -->
-<div class="card bg-dark border-secondary mb-4">
-    <div class="card-header border-secondary">
-        <h5 class="mb-0"><i class="bi bi-tags"></i> Gider Kalemleri</h5>
-    </div>
+<div class="card mb-4">
+    <div class="card-header"><i class="bi bi-tags"></i> Gider Kalemleri</div>
     <div class="card-body">
-        <form method="POST" action="{{ url_for('ayarlar.gider_kalemi_ekle') }}" class="row g-3 align-items-end mb-4">
-            <div class="col-auto">
-                <label for="kalem_adi" class="form-label">Yeni Gider Kalemi</label>
-                <input type="text" class="form-control" id="kalem_adi" name="kalem_adi" placeholder="Kalem adi giriniz">
+        <form method="POST" action="{{ url_for('ayarlar.gider_kalemi_ekle') }}" class="d-flex gap-2 align-items-end mb-4">
+            <div>
+                <label class="form-label">Yeni Gider Kalemi</label>
+                <input type="text" class="form-control" name="kalem_adi" placeholder="Kalem adi giriniz">
             </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-success"><i class="bi bi-plus-lg"></i> Ekle</button>
-            </div>
+            <button type="submit" class="btn btn-success"><i class="bi bi-plus-lg"></i> Ekle</button>
         </form>
-        <div class="table-responsive">
-            <table class="table table-dark table-hover">
-                <thead>
-                    <tr>
-                        <th>Kalem Adi</th>
-                        <th style="width: 120px;">Durum</th>
-                        <th style="width: 120px;"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for kalem in gider_kalemleri %}
-                    <tr>
-                        <td class="align-middle">{{ kalem.kalem_adi }}</td>
-                        <td class="align-middle">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Kalem Adi</th>
+                    <th style="width:100px">Durum</th>
+                    <th style="width:120px"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for kalem in gider_kalemleri %}
+                <tr>
+                    <td class="align-middle">{{ kalem.kalem_adi }}</td>
+                    <td class="align-middle">
+                        {% if kalem.aktif %}
+                            <span class="badge bg-success">Aktif</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Pasif</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form method="POST" action="{{ url_for('ayarlar.gider_kalemi_toggle', kalem_id=kalem.id) }}">
                             {% if kalem.aktif %}
-                                <span class="badge bg-success">Aktif</span>
+                            <button type="submit" class="btn btn-sm btn-outline-warning"><i class="bi bi-pause-circle"></i> Pasif</button>
                             {% else %}
-                                <span class="badge bg-secondary">Pasif</span>
+                            <button type="submit" class="btn btn-sm btn-outline-success"><i class="bi bi-play-circle"></i> Aktif</button>
                             {% endif %}
-                        </td>
-                        <td>
-                            <form method="POST" action="{{ url_for('ayarlar.gider_kalemi_toggle', kalem_id=kalem.id) }}">
-                                {% if kalem.aktif %}
-                                    <button type="submit" class="btn btn-sm btn-outline-warning"><i class="bi bi-pause-circle"></i> Pasif Yap</button>
-                                {% else %}
-                                    <button type="submit" class="btn btn-sm btn-outline-success"><i class="bi bi-play-circle"></i> Aktif Yap</button>
-                                {% endif %}
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 
 <!-- Mesaj Sablonu -->
-<div class="card bg-dark border-secondary mb-4">
-    <div class="card-header border-secondary">
-        <h5 class="mb-0"><i class="bi bi-chat-square-text"></i> Mesaj Sablonu</h5>
-    </div>
+<div class="card mb-4">
+    <div class="card-header"><i class="bi bi-chat-square-text"></i> Mesaj Sablonu</div>
     <div class="card-body">
         <form method="POST" action="{{ url_for('ayarlar.mesaj_sablonu_kaydet') }}">
             <div class="mb-3">
-                <label for="mesaj_sablonu" class="form-label">Sablon Metni</label>
-                <textarea class="form-control" id="mesaj_sablonu" name="mesaj_sablonu" rows="6">{{ mesaj_sablonu }}</textarea>
-                <div class="form-text">
+                <label class="form-label">Sablon Metni</label>
+                <textarea class="form-control" name="mesaj_sablonu" rows="6">{{ mesaj_sablonu }}</textarea>
+                <div class="form-text mt-2">
                     Kullanilabilir degiskenler:
-                    <code>{apartman_adi}</code>,
-                    <code>{ay_yil}</code>,
-                    <code>{odemeyenler}</code>,
-                    <code>{borc_toplam}</code>,
-                    <code>{daire_no}</code>,
-                    <code>{sakin_adi}</code>
+                    <code>{apartman_adi}</code>
+                    <code>{ay_yil}</code>
+                    <code>{miktar}</code>
+                    <code>{odemeyenler}</code>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Kaydet</button>
         </form>
+    </div>
+</div>
+
+<!-- Yedekleme -->
+<div class="card mb-4" style="border-color: var(--accent-green)">
+    <div class="card-header" style="color: var(--accent-green)"><i class="bi bi-shield-check"></i> Veritabani Yedekleme</div>
+    <div class="card-body">
+        <p style="color:var(--text-secondary); font-size:0.85rem">
+            Tum verilerinizin bir kopyasini olusturur. Yedek dosyalari <code>yedekler/</code> klasorune kaydedilir.
+        </p>
+        <form method="POST" action="{{ url_for('ayarlar.yedekle') }}" class="mb-3">
+            <button type="submit" class="btn btn-success btn-sm"><i class="bi bi-download"></i> Simdi Yedekle</button>
+        </form>
+        {% if yedekler %}
+        <table class="table" style="font-size:0.82rem">
+            <thead>
+                <tr>
+                    <th>Yedek Dosyasi</th>
+                    <th>Boyut</th>
+                    <th style="width:80px"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for yedek in yedekler %}
+                <tr>
+                    <td class="font-mono">{{ yedek.adi }}</td>
+                    <td style="color:var(--text-secondary)">{{ yedek.boyut }}</td>
+                    <td><a href="{{ url_for('ayarlar.yedek_indir', dosya_adi=yedek.adi) }}" class="btn btn-outline-info btn-sm"><i class="bi bi-download"></i></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Kayitlari Sifirla -->
+<div class="card mb-4" style="border-color: var(--accent-red)">
+    <div class="card-header" style="color: var(--accent-red)"><i class="bi bi-exclamation-triangle-fill"></i> Tehlikeli Bolge</div>
+    <div class="card-body">
+        <p style="color:var(--text-secondary); font-size:0.85rem">
+            Tum odeme, gider, kasa ve bildirim kayitlarini sifirlar. <strong style="color:var(--text-primary)">Daire bilgileri, ayarlar ve gider kalemleri korunur.</strong>
+            Bu islem geri alinamaz.
+        </p>
+        <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#sifirlaModal">
+            <i class="bi bi-trash3"></i> Tum Kayitlari Sifirla
+        </button>
+    </div>
+</div>
+
+<!-- Sistem Bilgileri -->
+<div class="card mb-4" style="border-color: var(--border-light)">
+    <div class="card-header"><i class="bi bi-info-circle"></i> Sistem Bilgileri ve Tasima Rehberi</div>
+    <div class="card-body" style="font-size:0.85rem; color:var(--text-secondary); line-height:1.8">
+
+        <h6 style="color:var(--text-primary); font-weight:600; margin-top:0">Veriler Nerede?</h6>
+        <p>Tum veriler (odemeler, giderler, daire bilgileri, ayarlar, loglar) <code>apartman.db</code> adli tek bir dosyada tutuluyor. Bu dosya uygulama klasorunun icinde. PC kapansa da, uygulama kapansa da veriler kaybolmaz.</p>
+
+        <h6 style="color:var(--text-primary); font-weight:600">Yedekleme</h6>
+        <p>Duzenli olarak <code>apartman.db</code> dosyasini yedekleyin. USB'ye, buluta veya baska bir klasore kopyalamaniz yeterli. Bu dosya = tum verileriniz.</p>
+
+        <h6 style="color:var(--text-primary); font-weight:600">Baska Bilgisayara Tasima</h6>
+        <ol style="color:var(--text-secondary)">
+            <li>Tum <code>apartman</code> klasorunu USB veya bulut ile yeni bilgisayara kopyalayin</li>
+            <li>Yeni bilgisayarda <strong style="color:var(--text-primary)">Miniconda</strong> veya <strong style="color:var(--text-primary)">Anaconda</strong> kurulu olmali</li>
+            <li>Terminal (komut satiri) acin ve sirayla calistirin:
+                <pre style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:8px; padding:0.75rem; margin:0.5rem 0; color:var(--accent-cyan); font-size:0.82rem">conda create -n apartman python=3.11 -y
+conda activate apartman
+cd apartman_klasorunun_yolu
+pip install -r requirements.txt
+python app.py</pre>
+            </li>
+            <li>Tarayicida <code>http://127.0.0.1:5000</code> adresine gidin</li>
+        </ol>
+        <p><strong style="color:var(--accent-green)">Veri kaybi olmaz.</strong> <code>apartman.db</code> dosyasi klasorun icinde oldugu surece tum verileriniz korunur.</p>
+
+        <h6 style="color:var(--text-primary); font-weight:600">Uygulamayi Calistirma (Her Seferinde)</h6>
+        <pre style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:8px; padding:0.75rem; margin:0.5rem 0; color:var(--accent-cyan); font-size:0.82rem">conda activate apartman
+cd apartman_klasorunun_yolu
+python app.py</pre>
+
+        <h6 style="color:var(--text-primary); font-weight:600">Sorun Giderme</h6>
+        <ul style="color:var(--text-secondary)">
+            <li><strong>Sayfa acilmiyor:</strong> Terminalde <code>python app.py</code> calistigina emin olun</li>
+            <li><strong>Paket hatasi:</strong> <code>pip install -r requirements.txt</code> tekrar calistirin</li>
+            <li><strong>Veriler gozukmuyor:</strong> <code>apartman.db</code> dosyasinin uygulama klasorunde oldugundan emin olun</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Sifirlama Modal -->
+<div class="modal fade" id="sifirlaModal" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header" style="border-color: var(--accent-red)">
+                <h6 class="modal-title" style="color: var(--accent-red)"><i class="bi bi-exclamation-triangle-fill"></i> Emin misiniz?</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{{ url_for('ayarlar.sifirla') }}">
+                <div class="modal-body">
+                    <p style="font-size:0.85rem; color:var(--text-secondary)">
+                        Silinecekler: <strong style="color:var(--accent-red)">odemeler, giderler, kasa, bildirimler</strong>
+                    </p>
+                    <p style="font-size:0.85rem; color:var(--text-secondary)">
+                        Onaylamak icin asagiya <strong style="color:var(--text-primary)">DELETE</strong> yazin:
+                    </p>
+                    <input type="text" class="form-control" name="onay" placeholder="DELETE" autocomplete="off" required>
+                </div>
+                <div class="modal-footer" style="border-color: var(--border-color)">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Iptal</button>
+                    <button type="submit" class="btn btn-sm btn-danger"><i class="bi bi-trash3"></i> Sifirla</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}
