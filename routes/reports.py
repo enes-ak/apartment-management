@@ -19,7 +19,7 @@ REPORT_TYPES = {
 @bp.route('/')
 def index():
     now = datetime.now()
-    return render_template('raporlar.html', year=now.year, month=now.month,
+    return render_template('reports.html', year=now.year, month=now.month,
                            MONTH_NAMES=AY_ISIMLERI, REPORT_TYPES=REPORT_TYPES)
 
 

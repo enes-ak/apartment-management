@@ -16,21 +16,21 @@ def app():
     with app.app_context():
         # init_db already created tables and default data.
         # Update the seeded data to match test expectations.
-        from models import Daire, AidatAyari, Ayar
+        from models import Apartment, DuesConfig, Setting
         from datetime import date
 
-        # Update sakin_adi for all daires
-        for daire in Daire.query.all():
-            daire.sakin_adi = f'Sakin {daire.daire_no}'
+        # Update resident_name for all apartments
+        for apartment in Apartment.query.all():
+            apartment.resident_name = f'Sakin {apartment.unit_no}'
 
-        # Update aidat miktar
-        ayar = AidatAyari.query.first()
-        ayar.miktar = 500
-        ayar.gecerlilik_tarihi = date(2026, 1, 1)
+        # Update dues amount
+        config = DuesConfig.query.first()
+        config.amount = 500
+        config.effective_date = date(2026, 1, 1)
 
-        # Update ayarlar
-        Ayar.kaydet('apartman_adi', 'Test Apartmani')
-        Ayar.kaydet('mesaj_sablonu', '{apartman_adi} - {ay_yil}\n{odemeyenler}')
+        # Update settings
+        Setting.save('apartman_adi', 'Test Apartmani')
+        Setting.save('mesaj_sablonu', '{apartman_adi} - {ay_yil}\n{odemeyenler}')
 
         _db.session.commit()
 

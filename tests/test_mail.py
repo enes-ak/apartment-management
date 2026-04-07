@@ -1,34 +1,32 @@
 from unittest.mock import patch, MagicMock
-from models import Bildirim, Ayar
+from models import Notification, Setting
 from database import db as _db
 
 
-def test_bildirim_kaydi_olustur(db_session):
-    b = Bildirim(yil=2026, ay=4, gonderildi=True)
-    _db.session.add(b)
+def test_notification_record_create(db_session):
+    n = Notification(year=2026, month=4, is_sent=True)
+    _db.session.add(n)
     _db.session.commit()
-    assert Bildirim.query.filter_by(yil=2026, ay=4).first().gonderildi is True
+    assert Notification.query.filter_by(year=2026, month=4).first().is_sent is True
 
 
-def test_mail_kontrol_ilk_pazartesi(app):
-    from services.mail_servisi import ilk_pazartesi_mi
+def test_mail_check_first_monday(app):
+    from services.mail_service import is_first_monday
     from datetime import date
-    assert ilk_pazartesi_mi(date(2026, 4, 6)) is True
-    assert ilk_pazartesi_mi(date(2026, 4, 13)) is False
-    assert ilk_pazartesi_mi(date(2026, 4, 7)) is False
+    assert is_first_monday(date(2026, 4, 6)) is True
+    assert is_first_monday(date(2026, 4, 13)) is False
+    assert is_first_monday(date(2026, 4, 7)) is False
 
 
-@patch('services.mail_servisi.smtplib')
-def test_mail_gonder(mock_smtp, db_session):
-    Ayar.kaydet('mail_adresi', 'test@test.com')
-    Ayar.kaydet('smtp_sunucu', 'smtp.test.com')
-    Ayar.kaydet('smtp_port', '587')
-    Ayar.kaydet('smtp_sifre', 'sifre123')
-    from services.mail_servisi import mail_gonder
+@patch('services.mail_service.smtplib')
+def test_send_email(mock_smtp, db_session):
+    Setting.save('mail_adresi', 'test@test.com')
+    Setting.save('smtp_sunucu', 'smtp.test.com')
+    Setting.save('smtp_port', '587')
+    Setting.save('smtp_sifre', 'sifre123')
+    from services.mail_service import send_email
     mock_server = MagicMock()
     mock_smtp.SMTP.return_value.__enter__ = MagicMock(return_value=mock_server)
     mock_smtp.SMTP.return_value.__exit__ = MagicMock(return_value=False)
-    sonuc = mail_gonder('Test Konu', 'Test icerik')
-    assert sonuc is True
-
-
+    result = send_email('Test Konu', 'Test icerik')
+    assert result is True

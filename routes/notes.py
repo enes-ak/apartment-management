@@ -31,7 +31,7 @@ def index():
 
     selected = notes[selected_month - 1]
 
-    return render_template('notlar.html', year=year, notes=notes,
+    return render_template('notes.html', year=year, notes=notes,
                            selected=selected, selected_month=selected_month)
 
 

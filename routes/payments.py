@@ -27,7 +27,7 @@ def index():
     total_apartments = len(apartments)
     paid = sum(1 for p in payment_statuses.values() if p and p.is_paid)
     unpaid = total_apartments - paid
-    return render_template('odemeler.html', apartments=apartments, payment_statuses=payment_statuses,
+    return render_template('payments.html', apartments=apartments, payment_statuses=payment_statuses,
                            year=year, month=month, dues=dues, MONTH_NAMES=AY_ISIMLERI,
                            total_apartments=total_apartments, paid_count=paid, unpaid_count=unpaid)
 
@@ -45,7 +45,7 @@ def toggle(daire_id, yil, ay):
     apartment = Apartment.query.get(daire_id)
     status = 'odendi' if payment.is_paid else 'geri alindi'
     Log.record(f'Daire {apartment.unit_no} - {AY_ISIMLERI[ay]} {yil} aidat {status}')
-    return render_template('parcalar/odeme_satir.html', apartment=apartment, payment=payment, year=yil, month=ay, MONTH_NAMES=AY_ISIMLERI)
+    return render_template('partials/payment_row.html', apartment=apartment, payment=payment, year=yil, month=ay, MONTH_NAMES=AY_ISIMLERI)
 
 @bp.route('/toplu/<int:daire_id>/<int:yil>', methods=['POST'])
 def bulk_pay(daire_id, yil):
@@ -109,7 +109,7 @@ def apartment_detail(daire_id):
     remaining_amount = unpaid_count * dues
     overdue_amount = overdue_count * dues
 
-    return render_template('daire_detay.html', apartment=apartment, monthly_status=monthly_status,
+    return render_template('apartment_detail.html', apartment=apartment, monthly_status=monthly_status,
                            dues=dues, year=year, last_month=last_month,
                            paid_count=paid_count, unpaid_count=unpaid_count,
                            overdue_count=overdue_count,

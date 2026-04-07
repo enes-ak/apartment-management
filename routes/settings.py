@@ -25,7 +25,7 @@ def index():
                 size = os.path.getsize(path) / 1024  # KB
                 backups.append({'name': f, 'size': f'{size:.0f} KB'})
 
-    return render_template('ayarlar.html',
+    return render_template('settings.html',
                            building_name=building_name, message_template=message_template,
                            dues=dues, apartments=apartments, expense_categories=expense_categories,
                            backups=backups)

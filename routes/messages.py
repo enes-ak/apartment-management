@@ -13,7 +13,7 @@ AY_ISIMLERI = {
 @bp.route('/')
 def index():
     now = datetime.now()
-    return render_template('mesajlar.html', year=now.year, month=now.month, MONTH_NAMES=AY_ISIMLERI)
+    return render_template('messages.html', year=now.year, month=now.month, MONTH_NAMES=AY_ISIMLERI)
 
 @bp.route('/olustur')
 def generate():
@@ -47,5 +47,5 @@ def generate():
         miktar=f'{dues:.2f}',
         odemeyenler=defaulters_text,
     )
-    return render_template('parcalar/mesaj_onizleme.html', message=message, apartments=apartments,
+    return render_template('partials/message_preview.html', message=message, apartments=apartments,
                            year=year, month=month, month_name=AY_ISIMLERI[month])

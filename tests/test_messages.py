@@ -1,22 +1,22 @@
-from models import Daire, Odeme
+from models import Apartment, Payment
 from database import db as _db
 
 
-def test_mesajlar_sayfasi_yukle(client):
+def test_messages_page_load(client):
     response = client.get('/mesajlar/')
     assert response.status_code == 200
     assert 'Mesaj Hazirla'.encode() in response.data
 
 
-def test_mesaj_olustur_tum_odemeyenler(client, db_session):
+def test_message_create_all_unpaid(client, db_session):
     response = client.get('/mesajlar/olustur?yil=2026&ay=4')
     assert response.status_code == 200
     assert 'Daire 1'.encode() in response.data
 
 
-def test_mesaj_olustur_kismi_odeme(client, db_session):
-    daire = Daire.query.filter_by(daire_no=1).first()
-    _db.session.add(Odeme(daire_id=daire.id, yil=2026, ay=4, odendi=True))
+def test_message_create_partial_payment(client, db_session):
+    apartment = Apartment.query.filter_by(unit_no=1).first()
+    _db.session.add(Payment(apartment_id=apartment.id, year=2026, month=4, is_paid=True))
     _db.session.commit()
     response = client.get('/mesajlar/olustur?yil=2026&ay=4')
     assert response.status_code == 200

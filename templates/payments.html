@@ -64,7 +64,7 @@
             <tbody>
                 {% for apartment in apartments %}
                     {% set payment = payment_statuses[apartment.id] %}
-                    {% include 'parcalar/odeme_satir.html' %}
+                    {% include 'partials/payment_row.html' %}
                 {% endfor %}
             </tbody>
         </table>

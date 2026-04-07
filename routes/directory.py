@@ -10,7 +10,7 @@ def index():
     staff = Directory.query.filter_by(category='gorevli').order_by(Directory.sort_order, Directory.id).all()
     info = Directory.query.filter_by(category='bilgi').order_by(Directory.sort_order, Directory.id).all()
     subscriptions = Directory.query.filter_by(category='abonelik').order_by(Directory.sort_order, Directory.id).all()
-    return render_template('rehber.html', gorevliler=staff, bilgiler=info, abonelikler=subscriptions)
+    return render_template('directory.html', gorevliler=staff, bilgiler=info, abonelikler=subscriptions)
 
 
 @bp.route('/ekle', methods=['POST'])

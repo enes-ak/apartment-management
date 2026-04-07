@@ -36,7 +36,7 @@ def index():
     expected_income = total_apartments * 12 * dues
     collection_rate = (total_paid / (total_apartments * 12) * 100) if total_apartments > 0 else 0
 
-    return render_template('kasa.html',
+    return render_template('cash_register.html',
                            year=year,
                            dues=dues,
                            total_apartments=total_apartments,

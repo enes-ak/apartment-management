@@ -21,7 +21,7 @@ def index():
     categories = ExpenseCategory.query.filter_by(is_active=True).all()
     expenses = Expense.query.filter_by(year=year, month=month).all()
     total = sum(e.amount for e in expenses)
-    return render_template('giderler.html', categories=categories, expenses=expenses,
+    return render_template('expenses.html', categories=categories, expenses=expenses,
                            year=year, month=month, total=total, MONTH_NAMES=AY_ISIMLERI)
 
 

@@ -1,52 +1,52 @@
-from models import Daire, AidatAyari, GiderKalemi, Ayar
+from models import Apartment, DuesConfig, ExpenseCategory, Setting
 from datetime import date
 
 
-def test_daire_sayisi(db_session):
-    assert Daire.query.count() == 12
+def test_apartment_count(db_session):
+    assert Apartment.query.count() == 12
 
 
-def test_daire_no_sirali(db_session):
-    daireler = Daire.query.order_by(Daire.daire_no).all()
-    assert [d.daire_no for d in daireler] == list(range(1, 13))
+def test_apartment_unit_no_ordered(db_session):
+    apartments = Apartment.query.order_by(Apartment.unit_no).all()
+    assert [a.unit_no for a in apartments] == list(range(1, 13))
 
 
-def test_aidat_guncel_miktar(db_session):
-    assert AidatAyari.guncel_miktar() == 500
+def test_dues_current_amount(db_session):
+    assert DuesConfig.current_amount() == 500
 
 
-def test_aidat_zam(db_session):
+def test_dues_increase(db_session):
     from database import db
-    db.session.add(AidatAyari(miktar=750, gecerlilik_tarihi=date(2026, 4, 1)))
+    db.session.add(DuesConfig(amount=750, effective_date=date(2026, 4, 1)))
     db.session.commit()
-    assert AidatAyari.guncel_miktar() == 750
+    assert DuesConfig.current_amount() == 750
 
 
-def test_gider_kalemleri(db_session):
-    aktif = GiderKalemi.query.filter_by(aktif=True).all()
-    assert len(aktif) == 4
-    isimler = {k.kalem_adi for k in aktif}
-    assert 'Elektrik' in isimler
-    assert 'Su' in isimler
+def test_expense_categories(db_session):
+    active = ExpenseCategory.query.filter_by(is_active=True).all()
+    assert len(active) == 4
+    names = {k.category_name for k in active}
+    assert 'Elektrik' in names
+    assert 'Su' in names
 
 
-def test_ayar_getir_kaydet(db_session):
-    assert Ayar.getir('apartman_adi') == 'Test Apartmani'
-    Ayar.kaydet('apartman_adi', 'Yeni Apartman')
-    assert Ayar.getir('apartman_adi') == 'Yeni Apartman'
+def test_setting_get_save(db_session):
+    assert Setting.get('apartman_adi') == 'Test Apartmani'
+    Setting.save('apartman_adi', 'Yeni Apartman')
+    assert Setting.get('apartman_adi') == 'Yeni Apartman'
 
 
-def test_ayar_getir_varsayilan(db_session):
-    assert Ayar.getir('yok_boyle_bir_sey', 'fallback') == 'fallback'
+def test_setting_get_default(db_session):
+    assert Setting.get('yok_boyle_bir_sey', 'fallback') == 'fallback'
 
 
-def test_ayarlar_sayfasi_yukle(client):
+def test_settings_page_load(client):
     response = client.get('/ayarlar/')
     assert response.status_code == 200
     assert 'Ayarlar'.encode() in response.data
 
 
-def test_ayarlar_apartman_adi_guncelle(client):
+def test_settings_update_apartment_name(client):
     response = client.post('/ayarlar/genel', data={
         'apartman_adi': 'Gul Apartmani',
         'mail_adresi': 'test@test.com',
@@ -55,21 +55,21 @@ def test_ayarlar_apartman_adi_guncelle(client):
         'smtp_sifre': '',
     }, follow_redirects=True)
     assert response.status_code == 200
-    from models import Ayar
-    assert Ayar.getir('apartman_adi') == 'Gul Apartmani'
+    from models import Setting
+    assert Setting.get('apartman_adi') == 'Gul Apartmani'
 
 
-def test_aidat_guncelle(client):
+def test_dues_update(client):
     response = client.post('/ayarlar/aidat', data={
         'miktar': '750',
     }, follow_redirects=True)
     assert response.status_code == 200
-    from models import AidatAyari
-    assert AidatAyari.guncel_miktar() == 750
+    from models import DuesConfig
+    assert DuesConfig.current_amount() == 750
 
 
-def test_daire_guncelle(client):
-    from models import Daire
+def test_apartment_update(client):
+    from models import Apartment
     response = client.post('/ayarlar/daire/1', data={
         'sakin_adi': 'Ahmet Yilmaz',
         'telefon': '5551234567',
@@ -77,17 +77,17 @@ def test_daire_guncelle(client):
     assert response.status_code == 200
 
 
-def test_gider_kalemi_ekle(client):
+def test_expense_category_add(client):
     response = client.post('/ayarlar/gider-kalemi', data={
         'kalem_adi': 'Dogalgaz',
     }, follow_redirects=True)
     assert response.status_code == 200
-    from models import GiderKalemi
-    assert GiderKalemi.query.filter_by(kalem_adi='Dogalgaz').first() is not None
+    from models import ExpenseCategory
+    assert ExpenseCategory.query.filter_by(category_name='Dogalgaz').first() is not None
 
 
-def test_gider_kalemi_pasif_yap(client):
-    from models import GiderKalemi
-    kalem = GiderKalemi.query.first()
-    response = client.post(f'/ayarlar/gider-kalemi/{kalem.id}/toggle', follow_redirects=True)
+def test_expense_category_toggle(client):
+    from models import ExpenseCategory
+    category = ExpenseCategory.query.first()
+    response = client.post(f'/ayarlar/gider-kalemi/{category.id}/toggle', follow_redirects=True)
     assert response.status_code == 200

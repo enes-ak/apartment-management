@@ -15,4 +15,4 @@ def index():
         query_obj = query_obj.filter(Log.action.ilike(f'%{search}%'))
     logs = query_obj.order_by(Log.timestamp.desc()).paginate(page=page, per_page=per_page, error_out=False)
 
-    return render_template('loglar.html', logs=logs, search=search)
+    return render_template('logs.html', logs=logs, search=search)

@@ -48,7 +48,7 @@ def index():
         apartment = Apartment.query.get(apartment_id)
         defaulters.append({'apartment': apartment, 'overdue_months': overdue_months})
 
-    return render_template('ana_sayfa.html',
+    return render_template('dashboard.html',
                            year=year,
                            dues=dues,
                            total_apartments=total_apartments,
