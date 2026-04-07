@@ -1,6 +1,6 @@
-# Apartman Yonetim Sistemi
+# Apartment Management System
 
-Apartman yoneticileri icin gelistirilmis, aidat takibi, gider yonetimi, raporlama ve iletisim gibi tum yonetim islerini tek bir yerden yurutmeyi saglayan web tabanli yonetim uygulamasi.
+A web-based management application built for apartment building managers to handle dues tracking, expense management, reporting, and communication — all from a single dashboard.
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-3.1-green?logo=flask&logoColor=white)
@@ -10,185 +10,185 @@ Apartman yoneticileri icin gelistirilmis, aidat takibi, gider yonetimi, raporlam
 
 ---
 
-## Ozellikler
+## Features
 
-### Ana Sayfa (Dashboard)
-- Yillik gelir, gider, kasa bakiyesi ve aidat tutari ozet kartlari
-- Yillik ve guncel tahsilat oranlari
-- Odenmemis aidat uyari listesi (hangi daire, hangi ay)
-- Hizli erisim linkleri
+### Dashboard
+- Annual income, expenses, cash balance, and monthly dues summary cards
+- Annual and current collection rate percentages
+- Unpaid dues warning list (which apartment, which month)
+- Quick access links to all modules
 
-### Odeme Takibi
-- 12 daire icin aylik aidat odeme durumu goruntuleme
-- Tek tikla odendi/odenmedi degistirme (HTMX ile anlik guncelleme)
-- Toplu odeme: bir daire icin birden fazla ayi tek seferde isaretle
-- Daire detay sayfasi: yillik odeme gecmisi, toplam borc, gecikmis aylar
-- Daire bazli PDF rapor indirme
+### Payment Tracking
+- Monthly payment status view for 12 apartments
+- One-click paid/unpaid toggle (real-time update via HTMX)
+- Bulk payment: mark multiple months as paid for a single apartment at once
+- Apartment detail page: yearly payment history, total debt, overdue months
+- Per-apartment PDF report download
 
-### Gider Yonetimi
-- Aylik gider kaydi (kategori, tutar, aciklama)
-- On tanimli gider kalemleri: Elektrik, Su, Temizlik, Asansor Bakim
-- Ozel gider kalemi ekleme/aktif-pasif yapma
-- Gider silme ile otomatik kasa guncelleme
+### Expense Management
+- Monthly expense recording (category, amount, description)
+- Pre-defined expense categories: Electricity, Water, Cleaning, Elevator Maintenance
+- Add custom expense categories, activate/deactivate as needed
+- Automatic cash register update on expense changes
 
-### Kasa
-- Yillik gelir / gider / bakiye ozeti
-- Aydan aya devir hesabi
-- Gider dagilimi (kategori bazli yuzde)
-- Tahsilat orani
+### Cash Register
+- Annual income / expense / balance summary
+- Month-to-month carryover calculation
+- Expense distribution by category (with percentages)
+- Collection rate tracking
 
-### Mesaj Hazirlama
-- Odemeyen dairelere otomatik hatirlatma mesaji olusturma
-- Genel duyuru mesaji hazirlama
-- Sablon destegi: `{apartman_adi}`, `{ay_yil}`, `{miktar}`, `{odemeyenler}`
-- Mesaj onizleme ve panoya kopyalama
+### Message Preparation
+- Auto-generate reminder messages for apartments with unpaid dues
+- General announcement message creation
+- Template support: `{apartman_adi}`, `{ay_yil}`, `{miktar}`, `{odemeyenler}`
+- Message preview and copy to clipboard
 
-### Raporlar (Excel + PDF)
-- **Aylik Ozet:** Gelir, gider, net, gider dagilimi
-- **Odeme Durumu:** Tum daireler, odendi/odenmedi (renk kodlu)
-- **Gider Detay:** Kalem bazli tutar ve oran
-- **Yillik Ozet:** 12 ay gelir/gider/net tablosu
-- Turkce karakter destegi, profesyonel tablolar
+### Reports (Excel + PDF)
+- **Monthly Summary:** Income, expenses, net, expense breakdown
+- **Payment Status:** All apartments with paid/unpaid status (color-coded)
+- **Expense Detail:** Per-category amounts and percentages
+- **Annual Summary:** 12-month income/expense/net table
+- Turkish character support, professional table styling
 
-### Notlar
-- Her ay icin ayri not alani
-- Not ekleme, duzenleme, silme
-- Hangi ayda not var gosterge noktasi
-- Son guncelleme tarihi
+### Notes
+- Separate note area for each month
+- Create, edit, and delete notes
+- Visual indicator showing which months have notes
+- Last update timestamp
 
-### Rehber
-- **Gorevliler:** Asansorcu, temizlikci vs. (ad, telefon, IBAN)
-- **Abonelikler:** Elektrik, su, dogalgaz (abone/sayac numarasi)
-- **Apartman Bilgileri:** Adres, genel bilgiler, telefon, IBAN
+### Directory
+- **Staff:** Elevator technician, cleaner, etc. (name, phone, IBAN)
+- **Subscriptions:** Electricity, water, natural gas (subscriber/meter number)
+- **Building Info:** Address, general information, phone, IBAN
 
-### Log Kayitlari
-- Tum islemlerin otomatik kaydi
-- Arama / filtreleme
-- Sayfalama (50'ser kayit)
+### Activity Logs
+- Automatic logging of all operations
+- Search and filter functionality
+- Pagination (50 records per page)
 
-### Ayarlar
-- Apartman adi duzenleme
-- Aidat miktari degistirme (tarihce ile)
-- Daire sakin bilgisi guncelleme (ad, telefon)
-- Gider kalemi yonetimi
-- Mesaj sablonu duzenleme
-- Veritabani yedekleme (indir / listele)
-- Tum verileri sifirlama (onay kodlu)
+### Settings
+- Edit building name
+- Change monthly dues amount (with rate change history)
+- Update apartment resident info (name, phone)
+- Expense category management
+- Message template editing
+- Database backup (download / list backups)
+- Full data reset (with confirmation code)
 
-### E-posta Bildirimi
-- SMTP ayarlari ile mail gonderme
-- Her ayin ilk pazartesi otomatik aidat hatirlatmasi
-- Bildirim durumu takibi
+### Email Notifications
+- SMTP-based email sending
+- Automatic dues reminder on the first Monday of each month
+- Notification status tracking
 
-### Mobil Uyumlu (Responsive)
-- Hamburger menu ile sidebar acilir/kapanir
-- Kartlar, tablolar, formlar mobil uyumlu
-- Telefon, tablet ve PC'de duzgun gorunum
+### Responsive Design
+- Hamburger menu with slide-out sidebar on mobile
+- Cards, tables, and forms adapt to mobile screens
+- Clean layout on phone, tablet, and desktop
 
 ---
 
-## Teknolojiler
+## Tech Stack
 
-| Katman | Teknoloji |
-|--------|-----------|
+| Layer | Technology |
+|-------|-----------|
 | Backend | Python 3.10+, Flask 3.1, Flask-SQLAlchemy |
-| Veritabani | SQLite |
+| Database | SQLite |
 | Frontend | Bootstrap 5.3, Bootstrap Icons, HTMX 2.0 |
-| Raporlama | ReportLab (PDF), OpenPyXL (Excel) |
-| Font | Plus Jakarta Sans, JetBrains Mono |
-| Tema | Dark Theme |
+| Reporting | ReportLab (PDF), OpenPyXL (Excel) |
+| Fonts | Plus Jakarta Sans, JetBrains Mono |
+| Theme | Dark Theme |
 
 ---
 
-## Kurulum
+## Installation
 
-### Gereksinimler
-- Python 3.10 veya uzeri
+### Requirements
+- Python 3.10 or higher
 - pip
 
-### Adimlar
+### Steps
 
 ```bash
-# Repoyu klonla
+# Clone the repository
 git clone https://github.com/enes-ak/apartment-management.git
 cd apartment-management
 
-# Sanal ortam olustur
+# Create virtual environment
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 
-# Bagimlilikari yukle
+# Install dependencies
 pip install -r requirements.txt
 
-# Uygulamayi baslat
+# Run the application
 python app.py
 ```
 
-Tarayicida `http://localhost:5000` adresine git.
+Open `http://localhost:5000` in your browser.
 
-> **Not:** Ilk calistirmada veritabani ve 12 daire otomatik olarak olusturulur.
+> **Note:** The database and 12 apartments are automatically created on first run.
 
 ---
 
-## Proje Yapisi
+## Project Structure
 
 ```
 apartment-management/
-├── app.py                  # Uygulama baslangic noktasi
-├── config.py               # Yapilandirma
-├── database.py             # Veritabani baslangic
-├── requirements.txt        # Python bagimliliklar
+├── app.py                  # Application entry point
+├── config.py               # Configuration
+├── database.py             # Database initialization
+├── requirements.txt        # Python dependencies
 │
-├── models/                 # Veritabani modelleri
-│   ├── daire.py            # Daire (apartman birimi)
-│   ├── odeme.py            # Odeme takibi
-│   ├── gider.py            # Gider & gider kalemleri
-│   ├── kasa.py             # Kasa (gelir/gider ozeti)
-│   ├── ayar.py             # Ayarlar, aidat, bildirim
-│   ├── log.py              # Aktivite logları
-│   ├── not_.py             # Aylik notlar
-│   └── rehber.py           # Rehber (gorevli/abonelik/bilgi)
+├── models/                 # Database models
+│   ├── daire.py            # Apartment unit
+│   ├── odeme.py            # Payment tracking
+│   ├── gider.py            # Expenses & expense categories
+│   ├── kasa.py             # Cash register (income/expense summary)
+│   ├── ayar.py             # Settings, dues config, notifications
+│   ├── log.py              # Activity logs
+│   ├── not_.py             # Monthly notes
+│   └── rehber.py           # Directory (staff/subscriptions/info)
 │
-├── routes/                 # URL route'lari
+├── routes/                 # URL routes
 │   ├── ana_sayfa.py        # Dashboard
-│   ├── odemeler.py         # Odeme islemleri
-│   ├── giderler.py         # Gider islemleri
-│   ├── kasa.py             # Kasa goruntuleme
-│   ├── mesajlar.py         # Mesaj hazirlama
-│   ├── raporlar.py         # Rapor indirme
-│   ├── notlar.py           # Not yonetimi
-│   ├── rehber.py           # Rehber yonetimi
-│   ├── loglar.py           # Log goruntuleme
-│   └── ayarlar.py          # Ayarlar yonetimi
+│   ├── odemeler.py         # Payment operations
+│   ├── giderler.py         # Expense operations
+│   ├── kasa.py             # Cash register view
+│   ├── mesajlar.py         # Message preparation
+│   ├── raporlar.py         # Report downloads
+│   ├── notlar.py           # Note management
+│   ├── rehber.py           # Directory management
+│   ├── loglar.py           # Log viewing
+│   └── ayarlar.py          # Settings management
 │
-├── services/               # Is mantigi servisleri
-│   ├── kasa_servisi.py     # Kasa hesaplama
-│   ├── rapor_servisi.py    # Excel & PDF rapor uretimi
-│   └── mail_servisi.py     # E-posta gonderimi
+├── services/               # Business logic services
+│   ├── kasa_servisi.py     # Cash register calculations
+│   ├── rapor_servisi.py    # Excel & PDF report generation
+│   └── mail_servisi.py     # Email sending
 │
-├── templates/              # HTML sablonlari (Jinja2)
-│   ├── base.html           # Ana layout (sidebar, responsive)
+├── templates/              # HTML templates (Jinja2)
+│   ├── base.html           # Main layout (sidebar, responsive)
 │   ├── ana_sayfa.html      # Dashboard
-│   ├── odemeler.html       # Odeme tablosu
-│   ├── daire_detay.html    # Daire detay sayfasi
-│   ├── giderler.html       # Gider kaydi
-│   ├── kasa.html           # Kasa ozeti
-│   ├── mesajlar.html       # Mesaj hazirlama
-│   ├── raporlar.html       # Rapor secimi
-│   ├── notlar.html         # Aylik notlar
-│   ├── rehber.html         # Rehber
-│   ├── loglar.html         # Log listesi
-│   ├── ayarlar.html        # Ayarlar
-│   └── parcalar/           # Yeniden kullanilabilir parcalar
+│   ├── odemeler.html       # Payment table
+│   ├── daire_detay.html    # Apartment detail page
+│   ├── giderler.html       # Expense recording
+│   ├── kasa.html           # Cash register summary
+│   ├── mesajlar.html       # Message preparation
+│   ├── raporlar.html       # Report selection
+│   ├── notlar.html         # Monthly notes
+│   ├── rehber.html         # Directory
+│   ├── loglar.html         # Log list
+│   ├── ayarlar.html        # Settings
+│   └── parcalar/           # Reusable partials
 │       ├── odeme_satir.html
 │       └── mesaj_onizleme.html
 │
 ├── static/
-│   ├── css/stil.css        # Tum stiller (dark theme + responsive)
-│   ├── js/uygulama.js      # JavaScript fonksiyonlari
+│   ├── css/stil.css        # All styles (dark theme + responsive)
+│   ├── js/uygulama.js      # JavaScript utilities
 │   └── favicon.svg         # Favicon
 │
-├── tests/                  # Test dosyalari
+├── tests/                  # Test files
 │   ├── test_modeller.py
 │   ├── test_odemeler.py
 │   ├── test_giderler.py
@@ -198,25 +198,13 @@ apartment-management/
 │   ├── test_mail.py
 │   └── test_ayarlar.py
 │
-├── raporlar/               # Olusturulan raporlar (gitignore)
-└── yedekler/               # Veritabani yedekleri (gitignore)
+├── raporlar/               # Generated reports (gitignored)
+└── yedekler/               # Database backups (gitignored)
 ```
 
 ---
 
-## Ekran Goruntuleri
-
-| Dashboard | Odeme Takibi |
-|-----------|-------------|
-| Yillik ozet kartlari, odenmemis uyarilar | Aylik odeme durumu, tek tikla guncelle |
-
-| Raporlar | Rehber |
-|----------|--------|
-| Excel & PDF rapor indirme | Gorevliler, abonelikler, bilgiler |
-
----
-
-## Testler
+## Tests
 
 ```bash
 pytest
@@ -224,6 +212,6 @@ pytest
 
 ---
 
-## Lisans
+## License
 
 MIT
