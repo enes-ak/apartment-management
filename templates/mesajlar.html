@@ -11,16 +11,16 @@
             <div class="col-auto">
                 <label class="form-label">Ay</label>
                 <select id="mesaj-ay" class="form-select form-select-sm" style="width:auto">
-                    {% for num, isim in ay_isimleri.items() %}
-                    <option value="{{ num }}" {% if num == ay %}selected{% endif %}>{{ isim }}</option>
+                    {% for num, isim in MONTH_NAMES.items() %}
+                    <option value="{{ num }}" {% if num == month %}selected{% endif %}>{{ isim }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="col-auto">
                 <label class="form-label">Yil</label>
                 <select id="mesaj-yil" class="form-select form-select-sm" style="width:auto">
-                    {% for y in range(2026, yil + 2) %}
-                    <option value="{{ y }}" {% if y == yil %}selected{% endif %}>{{ y }}</option>
+                    {% for y in range(2026, year + 2) %}
+                    <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}</option>
                     {% endfor %}
                 </select>
             </div>

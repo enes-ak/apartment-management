@@ -9,11 +9,11 @@
 <div class="card mb-4">
     <div class="card-header"><i class="bi bi-sliders"></i> Genel Ayarlar</div>
     <div class="card-body">
-        <form method="POST" action="{{ url_for('ayarlar.genel_kaydet') }}">
+        <form method="POST" action="{{ url_for('settings.save_general') }}">
             <div class="row g-3 mb-3">
                 <div class="col-md-6">
                     <label class="form-label">Apartman Adi</label>
-                    <input type="text" class="form-control" name="apartman_adi" value="{{ apartman_adi }}">
+                    <input type="text" class="form-control" name="apartman_adi" value="{{ building_name }}">
                 </div>
             </div>
             <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Kaydet</button>
@@ -25,11 +25,11 @@
 <div class="card mb-4">
     <div class="card-header"><i class="bi bi-cash-coin"></i> Aidat Miktari</div>
     <div class="card-body">
-        <p style="color:var(--text-secondary); font-size:0.85rem">Guncel aidat miktari: <strong style="color:var(--accent-blue)">{{ "%.2f"|format(aidat) }} TL</strong></p>
-        <form method="POST" action="{{ url_for('ayarlar.aidat_kaydet') }}" class="d-flex gap-2 align-items-end">
+        <p style="color:var(--text-secondary); font-size:0.85rem">Guncel aidat miktari: <strong style="color:var(--accent-blue)">{{ "%.2f"|format(dues) }} TL</strong></p>
+        <form method="POST" action="{{ url_for('settings.save_dues') }}" class="d-flex gap-2 align-items-end">
             <div>
                 <label class="form-label">Yeni Miktar (TL)</label>
-                <input type="number" step="0.01" class="form-control" name="miktar" value="{{ "%.2f"|format(aidat) }}" style="width:180px">
+                <input type="number" step="0.01" class="form-control" name="miktar" value="{{ "%.2f"|format(dues) }}" style="width:180px">
             </div>
             <button type="submit" class="btn btn-primary"><i class="bi bi-arrow-repeat"></i> Guncelle</button>
         </form>
@@ -50,12 +50,12 @@
                 </tr>
             </thead>
             <tbody>
-                {% for daire in daireler %}
+                {% for apartment in apartments %}
                 <tr>
-                    <form method="POST" action="{{ url_for('ayarlar.daire_kaydet', daire_id=daire.id) }}">
-                        <td class="align-middle" style="font-weight:600">{{ daire.daire_no }}</td>
-                        <td><input type="text" class="form-control form-control-sm" name="sakin_adi" value="{{ daire.sakin_adi or '' }}"></td>
-                        <td><input type="text" class="form-control form-control-sm" name="telefon" value="{{ daire.telefon or '' }}"></td>
+                    <form method="POST" action="{{ url_for('settings.save_apartment', daire_id=apartment.id) }}">
+                        <td class="align-middle" style="font-weight:600">{{ apartment.unit_no }}</td>
+                        <td><input type="text" class="form-control form-control-sm" name="sakin_adi" value="{{ apartment.resident_name or '' }}"></td>
+                        <td><input type="text" class="form-control form-control-sm" name="telefon" value="{{ apartment.phone or '' }}"></td>
                         <td><button type="submit" class="btn btn-sm btn-outline-primary"><i class="bi bi-check-lg"></i></button></td>
                     </form>
                 </tr>
@@ -69,7 +69,7 @@
 <div class="card mb-4">
     <div class="card-header"><i class="bi bi-tags"></i> Gider Kalemleri</div>
     <div class="card-body">
-        <form method="POST" action="{{ url_for('ayarlar.gider_kalemi_ekle') }}" class="d-flex gap-2 align-items-end mb-4">
+        <form method="POST" action="{{ url_for('settings.add_expense_category') }}" class="d-flex gap-2 align-items-end mb-4">
             <div>
                 <label class="form-label">Yeni Gider Kalemi</label>
                 <input type="text" class="form-control" name="kalem_adi" placeholder="Kalem adi giriniz">
@@ -85,19 +85,19 @@
                 </tr>
             </thead>
             <tbody>
-                {% for kalem in gider_kalemleri %}
+                {% for cat in expense_categories %}
                 <tr>
-                    <td class="align-middle">{{ kalem.kalem_adi }}</td>
+                    <td class="align-middle">{{ cat.category_name }}</td>
                     <td class="align-middle">
-                        {% if kalem.aktif %}
+                        {% if cat.is_active %}
                             <span class="badge bg-success">Aktif</span>
                         {% else %}
                             <span class="badge bg-secondary">Pasif</span>
                         {% endif %}
                     </td>
                     <td>
-                        <form method="POST" action="{{ url_for('ayarlar.gider_kalemi_toggle', kalem_id=kalem.id) }}">
-                            {% if kalem.aktif %}
+                        <form method="POST" action="{{ url_for('settings.toggle_expense_category', kalem_id=cat.id) }}">
+                            {% if cat.is_active %}
                             <button type="submit" class="btn btn-sm btn-outline-warning"><i class="bi bi-pause-circle"></i> Pasif</button>
                             {% else %}
                             <button type="submit" class="btn btn-sm btn-outline-success"><i class="bi bi-play-circle"></i> Aktif</button>
@@ -115,10 +115,10 @@
 <div class="card mb-4">
     <div class="card-header"><i class="bi bi-chat-square-text"></i> Mesaj Sablonu</div>
     <div class="card-body">
-        <form method="POST" action="{{ url_for('ayarlar.mesaj_sablonu_kaydet') }}">
+        <form method="POST" action="{{ url_for('settings.save_message_template') }}">
             <div class="mb-3">
                 <label class="form-label">Sablon Metni</label>
-                <textarea class="form-control" name="mesaj_sablonu" rows="6">{{ mesaj_sablonu }}</textarea>
+                <textarea class="form-control" name="mesaj_sablonu" rows="6">{{ message_template }}</textarea>
                 <div class="form-text mt-2">
                     Kullanilabilir degiskenler:
                     <code>{apartman_adi}</code>
@@ -139,10 +139,10 @@
         <p style="color:var(--text-secondary); font-size:0.85rem">
             Tum verilerinizin bir kopyasini olusturur. Yedek dosyalari <code>yedekler/</code> klasorune kaydedilir.
         </p>
-        <form method="POST" action="{{ url_for('ayarlar.yedekle') }}" class="mb-3">
+        <form method="POST" action="{{ url_for('settings.backup') }}" class="mb-3">
             <button type="submit" class="btn btn-success btn-sm"><i class="bi bi-download"></i> Simdi Yedekle</button>
         </form>
-        {% if yedekler %}
+        {% if backups %}
         <table class="table" style="font-size:0.82rem">
             <thead>
                 <tr>
@@ -152,11 +152,11 @@
                 </tr>
             </thead>
             <tbody>
-                {% for yedek in yedekler %}
+                {% for backup in backups %}
                 <tr>
-                    <td class="font-mono">{{ yedek.adi }}</td>
-                    <td style="color:var(--text-secondary)">{{ yedek.boyut }}</td>
-                    <td><a href="{{ url_for('ayarlar.yedek_indir', dosya_adi=yedek.adi) }}" class="btn btn-outline-info btn-sm"><i class="bi bi-download"></i></a></td>
+                    <td class="font-mono">{{ backup.name }}</td>
+                    <td style="color:var(--text-secondary)">{{ backup.size }}</td>
+                    <td><a href="{{ url_for('settings.download_backup', dosya_adi=backup.name) }}" class="btn btn-outline-info btn-sm"><i class="bi bi-download"></i></a></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -227,7 +227,7 @@ python app.py</pre>
                 <h6 class="modal-title" style="color: var(--accent-red)"><i class="bi bi-exclamation-triangle-fill"></i> Emin misiniz?</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="POST" action="{{ url_for('ayarlar.sifirla') }}">
+            <form method="POST" action="{{ url_for('settings.reset') }}">
                 <div class="modal-body">
                     <p style="font-size:0.85rem; color:var(--text-secondary)">
                         Silinecekler: <strong style="color:var(--accent-red)">odemeler, giderler, kasa, bildirimler</strong>

@@ -22,12 +22,12 @@
                     {% for g in gorevliler %}
                     <div class="rehber-item">
                         <div class="rehber-item-info">
-                            <div class="rehber-item-baslik">{{ g.baslik }}</div>
-                            {% if g.deger %}
-                            <div class="rehber-item-deger">{{ g.deger }}</div>
+                            <div class="rehber-item-baslik">{{ g.title }}</div>
+                            {% if g.value %}
+                            <div class="rehber-item-deger">{{ g.value }}</div>
                             {% endif %}
-                            {% if g.telefon %}
-                            <div class="rehber-item-telefon"><i class="bi bi-telephone"></i> {{ g.telefon }}</div>
+                            {% if g.phone %}
+                            <div class="rehber-item-telefon"><i class="bi bi-telephone"></i> {{ g.phone }}</div>
                             {% endif %}
                             {% if g.iban %}
                             <div class="rehber-item-iban"><i class="bi bi-bank"></i> {{ g.iban }}</div>
@@ -37,8 +37,8 @@
                             <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#duzenleModal{{ g.id }}">
                                 <i class="bi bi-pencil"></i>
                             </button>
-                            <form method="POST" action="{{ url_for('rehber.sil', kayit_id=g.id) }}" style="display:inline"
-                                  onsubmit="return confirm('{{ g.baslik }} silinsin mi?')">
+                            <form method="POST" action="{{ url_for('directory.delete', kayit_id=g.id) }}" style="display:inline"
+                                  onsubmit="return confirm('{{ g.title }} silinsin mi?')">
                                 <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash3"></i></button>
                             </form>
                         </div>
@@ -70,12 +70,12 @@
                     {% for a in abonelikler %}
                     <div class="rehber-item">
                         <div class="rehber-item-info">
-                            <div class="rehber-item-baslik">{{ a.baslik }}</div>
-                            {% if a.deger %}
-                            <div class="rehber-item-abone-no"><i class="bi bi-hash"></i> {{ a.deger }}</div>
+                            <div class="rehber-item-baslik">{{ a.title }}</div>
+                            {% if a.value %}
+                            <div class="rehber-item-abone-no"><i class="bi bi-hash"></i> {{ a.value }}</div>
                             {% endif %}
-                            {% if a.telefon %}
-                            <div class="rehber-item-telefon"><i class="bi bi-telephone"></i> {{ a.telefon }}</div>
+                            {% if a.phone %}
+                            <div class="rehber-item-telefon"><i class="bi bi-telephone"></i> {{ a.phone }}</div>
                             {% endif %}
                             {% if a.iban %}
                             <div class="rehber-item-iban"><i class="bi bi-bank"></i> {{ a.iban }}</div>
@@ -85,8 +85,8 @@
                             <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#duzenleModal{{ a.id }}">
                                 <i class="bi bi-pencil"></i>
                             </button>
-                            <form method="POST" action="{{ url_for('rehber.sil', kayit_id=a.id) }}" style="display:inline"
-                                  onsubmit="return confirm('{{ a.baslik }} silinsin mi?')">
+                            <form method="POST" action="{{ url_for('directory.delete', kayit_id=a.id) }}" style="display:inline"
+                                  onsubmit="return confirm('{{ a.title }} silinsin mi?')">
                                 <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash3"></i></button>
                             </form>
                         </div>
@@ -118,12 +118,12 @@
                     {% for b in bilgiler %}
                     <div class="rehber-item">
                         <div class="rehber-item-info">
-                            <div class="rehber-item-baslik">{{ b.baslik }}</div>
-                            {% if b.deger %}
-                            <div class="rehber-item-deger">{{ b.deger }}</div>
+                            <div class="rehber-item-baslik">{{ b.title }}</div>
+                            {% if b.value %}
+                            <div class="rehber-item-deger">{{ b.value }}</div>
                             {% endif %}
-                            {% if b.telefon %}
-                            <div class="rehber-item-telefon"><i class="bi bi-telephone"></i> {{ b.telefon }}</div>
+                            {% if b.phone %}
+                            <div class="rehber-item-telefon"><i class="bi bi-telephone"></i> {{ b.phone }}</div>
                             {% endif %}
                             {% if b.iban %}
                             <div class="rehber-item-iban"><i class="bi bi-bank"></i> {{ b.iban }}</div>
@@ -133,8 +133,8 @@
                             <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#duzenleModal{{ b.id }}">
                                 <i class="bi bi-pencil"></i>
                             </button>
-                            <form method="POST" action="{{ url_for('rehber.sil', kayit_id=b.id) }}" style="display:inline"
-                                  onsubmit="return confirm('{{ b.baslik }} silinsin mi?')">
+                            <form method="POST" action="{{ url_for('directory.delete', kayit_id=b.id) }}" style="display:inline"
+                                  onsubmit="return confirm('{{ b.title }} silinsin mi?')">
                                 <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash3"></i></button>
                             </form>
                         </div>
@@ -156,7 +156,7 @@
 <div class="modal fade" id="gorevliEkleModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="{{ url_for('rehber.ekle') }}">
+            <form method="POST" action="{{ url_for('directory.add') }}">
                 <input type="hidden" name="kategori" value="gorevli">
                 <div class="modal-header">
                     <h6 class="modal-title"><i class="bi bi-person-plus"></i> Gorevli Ekle</h6>
@@ -193,7 +193,7 @@
 <div class="modal fade" id="abonelikEkleModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="{{ url_for('rehber.ekle') }}">
+            <form method="POST" action="{{ url_for('directory.add') }}">
                 <input type="hidden" name="kategori" value="abonelik">
                 <div class="modal-header">
                     <h6 class="modal-title"><i class="bi bi-lightning-charge"></i> Abonelik Ekle</h6>
@@ -222,7 +222,7 @@
 <div class="modal fade" id="bilgiEkleModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="{{ url_for('rehber.ekle') }}">
+            <form method="POST" action="{{ url_for('directory.add') }}">
                 <input type="hidden" name="kategori" value="bilgi">
                 <div class="modal-header">
                     <h6 class="modal-title"><i class="bi bi-plus-circle"></i> Bilgi Ekle</h6>
@@ -260,23 +260,23 @@
 <div class="modal fade" id="duzenleModal{{ item.id }}" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="{{ url_for('rehber.guncelle', kayit_id=item.id) }}">
+            <form method="POST" action="{{ url_for('directory.update', kayit_id=item.id) }}">
                 <div class="modal-header">
                     <h6 class="modal-title"><i class="bi bi-pencil"></i> Duzenle</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">{{ {'gorevli': 'Gorev', 'abonelik': 'Abonelik Adi', 'bilgi': 'Baslik'}[item.kategori] }}</label>
-                        <input type="text" class="form-control" name="baslik" value="{{ item.baslik }}" required>
+                        <label class="form-label">{{ {'gorevli': 'Gorev', 'abonelik': 'Abonelik Adi', 'bilgi': 'Baslik'}[item.category] }}</label>
+                        <input type="text" class="form-control" name="baslik" value="{{ item.title }}" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">{{ {'gorevli': 'Ad Soyad', 'abonelik': 'Abone / Sayac No', 'bilgi': 'Detay'}[item.kategori] }}</label>
-                        <input type="text" class="form-control" name="deger" value="{{ item.deger }}">
+                        <label class="form-label">{{ {'gorevli': 'Ad Soyad', 'abonelik': 'Abone / Sayac No', 'bilgi': 'Detay'}[item.category] }}</label>
+                        <input type="text" class="form-control" name="deger" value="{{ item.value }}">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Telefon</label>
-                        <input type="text" class="form-control" name="telefon" value="{{ item.telefon }}">
+                        <input type="text" class="form-control" name="telefon" value="{{ item.phone }}">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">IBAN</label>

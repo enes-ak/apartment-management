@@ -2,7 +2,7 @@ venv/
 __pycache__/
 *.pyc
 *.db
-raporlar/*.xlsx
-raporlar/*.pdf
+reports/*.xlsx
+reports/*.pdf
 .pytest_cache/
-yedekler/
+backups/

@@ -6,10 +6,10 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="page-title mb-0"><i class="bi bi-journal-text"></i> Aylik Notlar</h2>
     <form method="get" class="d-flex gap-2 align-items-center">
-        <input type="hidden" name="ay" value="{{ secili_ay }}">
+        <input type="hidden" name="ay" value="{{ selected_month }}">
         <select name="yil" class="form-select form-select-sm" style="width:auto" onchange="this.form.submit()">
-            {% for y in range(2026, yil + 3) %}
-            <option value="{{ y }}" {% if y == yil %}selected{% endif %}>{{ y }}</option>
+            {% for y in range(2026, year + 3) %}
+            <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}</option>
             {% endfor %}
         </select>
     </form>
@@ -19,14 +19,14 @@
     <!-- Sol Panel: Ay Listesi -->
     <div class="col-md-3">
         <div class="notlar-liste">
-            {% for kayit in notlar %}
-            <a href="{{ url_for('notlar.index', yil=yil, ay=kayit.ay) }}"
-               class="not-item {% if kayit.ay == secili_ay %}active{% endif %}">
+            {% for kayit in notes %}
+            <a href="{{ url_for('notes.index', yil=year, ay=kayit.month) }}"
+               class="not-item {% if kayit.month == selected_month %}active{% endif %}">
                 <div class="not-item-left">
-                    <span class="not-item-dot {% if kayit.var %}has-note{% endif %}"></span>
-                    <span class="not-item-ay">{{ kayit.ay_adi }}</span>
+                    <span class="not-item-dot {% if kayit.has_content %}has-note{% endif %}"></span>
+                    <span class="not-item-ay">{{ kayit.month_name }}</span>
                 </div>
-                {% if kayit.var %}
+                {% if kayit.has_content %}
                 <i class="bi bi-journal-check not-item-icon"></i>
                 {% endif %}
             </a>
@@ -38,12 +38,12 @@
     <div class="col-md-9">
         <div class="not-detay">
             <div class="not-detay-header">
-                <h4 class="not-detay-baslik">{{ secili.ay_adi }} {{ yil }}</h4>
+                <h4 class="not-detay-baslik">{{ selected.month_name }} {{ year }}</h4>
                 <div class="d-flex align-items-center gap-2">
-                    {% if secili.var and secili.tarih %}
-                    <span style="font-size:0.75rem; color:var(--text-muted)"><i class="bi bi-clock"></i> {{ secili.tarih.strftime('%d.%m.%Y %H:%M') }}</span>
+                    {% if selected.has_content and selected.date %}
+                    <span style="font-size:0.75rem; color:var(--text-muted)"><i class="bi bi-clock"></i> {{ selected.date.strftime('%d.%m.%Y %H:%M') }}</span>
                     {% endif %}
-                    {% if secili.var %}
+                    {% if selected.has_content %}
                     <span class="badge bg-success">Not mevcut</span>
                     {% endif %}
                 </div>
@@ -51,8 +51,8 @@
 
             <!-- Goruntuleme modu -->
             <div id="not-gorunum">
-                {% if secili.var %}
-                <div class="not-icerik">{{ secili.icerik }}</div>
+                {% if selected.has_content %}
+                <div class="not-icerik">{{ selected.content }}</div>
                 {% else %}
                 <div class="not-bos">
                     <i class="bi bi-journal-plus"></i>
@@ -66,10 +66,10 @@
 
             <!-- Duzenleme modu (gizli baslar) -->
             <div id="not-duzenle" style="display:none">
-                <form method="POST" action="{{ url_for('notlar.kaydet') }}">
-                    <input type="hidden" name="yil" value="{{ yil }}">
-                    <input type="hidden" name="ay" value="{{ secili_ay }}">
-                    <textarea class="form-control not-textarea" name="icerik" rows="8" placeholder="Toplanti kararlari, onemli olaylar, notlar...">{{ secili.icerik }}</textarea>
+                <form method="POST" action="{{ url_for('notes.save') }}">
+                    <input type="hidden" name="yil" value="{{ year }}">
+                    <input type="hidden" name="ay" value="{{ selected_month }}">
+                    <textarea class="form-control not-textarea" name="icerik" rows="8" placeholder="Toplanti kararlari, onemli olaylar, notlar...">{{ selected.content }}</textarea>
                     <div class="not-duzenle-actions">
                         <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-check-lg"></i> Kaydet</button>
                         <button type="button" class="btn btn-outline-secondary btn-sm" onclick="duzenleKapat()">Iptal</button>
@@ -78,7 +78,7 @@
             </div>
 
             <!-- Aksiyon butonlari (notu varsa goster) -->
-            {% if secili.var %}
+            {% if selected.has_content %}
             <div class="not-actions" id="not-actions">
                 <button class="btn btn-outline-primary btn-sm" onclick="duzenleAc()">
                     <i class="bi bi-pencil"></i> Duzenle
@@ -102,14 +102,14 @@
             </div>
             <div class="modal-body">
                 <p style="font-size:0.85rem; color:var(--text-secondary)">
-                    <strong style="color:var(--text-primary)">{{ secili.ay_adi }} {{ yil }}</strong> notunu silmek istediginize emin misiniz?
+                    <strong style="color:var(--text-primary)">{{ selected.month_name }} {{ year }}</strong> notunu silmek istediginize emin misiniz?
                 </p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Iptal</button>
-                <form method="POST" action="{{ url_for('notlar.sil') }}" style="display:inline">
-                    <input type="hidden" name="yil" value="{{ yil }}">
-                    <input type="hidden" name="ay" value="{{ secili_ay }}">
+                <form method="POST" action="{{ url_for('notes.delete') }}" style="display:inline">
+                    <input type="hidden" name="yil" value="{{ year }}">
+                    <input type="hidden" name="ay" value="{{ selected_month }}">
                     <button type="submit" class="btn btn-sm btn-danger"><i class="bi bi-trash3"></i> Sil</button>
                 </form>
             </div>

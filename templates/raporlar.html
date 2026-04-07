@@ -14,13 +14,13 @@
                 <form id="form-aylik-ozet">
                     <div class="d-flex gap-2 mb-3">
                         <select class="form-select form-select-sm" name="ay">
-                            {% for no, isim in ay_isimleri.items() %}
-                            <option value="{{ no }}" {% if no == ay %}selected{% endif %}>{{ isim }}</option>
+                            {% for no, isim in MONTH_NAMES.items() %}
+                            <option value="{{ no }}" {% if no == month %}selected{% endif %}>{{ isim }}</option>
                             {% endfor %}
                         </select>
                         <select class="form-select form-select-sm" name="yil">
-                            {% for y in range(2026, yil + 2) %}
-                            <option value="{{ y }}" {% if y == yil %}selected{% endif %}>{{ y }}</option>
+                            {% for y in range(2026, year + 2) %}
+                            <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -45,13 +45,13 @@
                 <form id="form-odeme-durumu">
                     <div class="d-flex gap-2 mb-3">
                         <select class="form-select form-select-sm" name="ay">
-                            {% for no, isim in ay_isimleri.items() %}
-                            <option value="{{ no }}" {% if no == ay %}selected{% endif %}>{{ isim }}</option>
+                            {% for no, isim in MONTH_NAMES.items() %}
+                            <option value="{{ no }}" {% if no == month %}selected{% endif %}>{{ isim }}</option>
                             {% endfor %}
                         </select>
                         <select class="form-select form-select-sm" name="yil">
-                            {% for y in range(2026, yil + 2) %}
-                            <option value="{{ y }}" {% if y == yil %}selected{% endif %}>{{ y }}</option>
+                            {% for y in range(2026, year + 2) %}
+                            <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -76,13 +76,13 @@
                 <form id="form-gider-detay">
                     <div class="d-flex gap-2 mb-3">
                         <select class="form-select form-select-sm" name="ay">
-                            {% for no, isim in ay_isimleri.items() %}
-                            <option value="{{ no }}" {% if no == ay %}selected{% endif %}>{{ isim }}</option>
+                            {% for no, isim in MONTH_NAMES.items() %}
+                            <option value="{{ no }}" {% if no == month %}selected{% endif %}>{{ isim }}</option>
                             {% endfor %}
                         </select>
                         <select class="form-select form-select-sm" name="yil">
-                            {% for y in range(2026, yil + 2) %}
-                            <option value="{{ y }}" {% if y == yil %}selected{% endif %}>{{ y }}</option>
+                            {% for y in range(2026, year + 2) %}
+                            <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -107,8 +107,8 @@
                 <form id="form-yillik-ozet">
                     <div class="d-flex gap-2 mb-3" style="max-width:200px">
                         <select class="form-select form-select-sm" name="yil">
-                            {% for y in range(2026, yil + 2) %}
-                            <option value="{{ y }}" {% if y == yil %}selected{% endif %}>{{ y }}</option>
+                            {% for y in range(2026, year + 2) %}
+                            <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}</option>
                             {% endfor %}
                         </select>
                     </div>

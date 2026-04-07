@@ -6,10 +6,10 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="page-title mb-0"><i class="bi bi-clock-history"></i> Log Kayitlari</h2>
     <form method="GET" class="d-flex gap-2">
-        <input type="text" name="q" class="form-control form-control-sm" style="width:250px" placeholder="Ara... (daire, gider, aidat...)" value="{{ arama }}">
+        <input type="text" name="q" class="form-control form-control-sm" style="width:250px" placeholder="Ara... (daire, gider, aidat...)" value="{{ search }}">
         <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-search"></i></button>
-        {% if arama %}
-        <a href="{{ url_for('loglar.index') }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-x-lg"></i></a>
+        {% if search %}
+        <a href="{{ url_for('logs.index') }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-x-lg"></i></a>
         {% endif %}
     </form>
 </div>
@@ -17,16 +17,16 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <span>
-            {% if arama %}
-                "{{ arama }}" icin sonuclar
+            {% if search %}
+                "{{ search }}" icin sonuclar
             {% else %}
                 Islem Gecmisi
             {% endif %}
         </span>
-        <span class="badge bg-info">{{ loglar.total }} kayit</span>
+        <span class="badge bg-info">{{ logs.total }} kayit</span>
     </div>
     <div class="card-body p-0">
-        {% if loglar.items %}
+        {% if logs.items %}
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -35,10 +35,10 @@
                 </tr>
             </thead>
             <tbody>
-                {% for log in loglar.items %}
+                {% for log in logs.items %}
                 <tr>
-                    <td class="font-mono" style="font-size:0.8rem; color:var(--text-secondary)">{{ log.tarih.strftime('%d.%m.%Y %H:%M') }}</td>
-                    <td>{{ log.eylem }}</td>
+                    <td class="font-mono" style="font-size:0.8rem; color:var(--text-secondary)">{{ log.timestamp.strftime('%d.%m.%Y %H:%M') }}</td>
+                    <td>{{ log.action }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -47,8 +47,8 @@
         <div class="text-center py-5" style="color:var(--text-muted)">
             <i class="bi bi-search" style="font-size:2rem"></i>
             <p class="mt-2 mb-0">
-                {% if arama %}
-                    "{{ arama }}" ile eslesen kayit bulunamadi.
+                {% if search %}
+                    "{{ search }}" ile eslesen kayit bulunamadi.
                 {% else %}
                     Henuz log kaydi bulunmuyor.
                 {% endif %}
@@ -56,24 +56,24 @@
         </div>
         {% endif %}
     </div>
-    {% if loglar.pages > 1 %}
+    {% if logs.pages > 1 %}
     <div class="card-footer d-flex justify-content-center">
         <nav>
             <ul class="pagination pagination-sm mb-0">
-                {% if loglar.has_prev %}
-                <li class="page-item"><a class="page-link" href="?sayfa={{ loglar.prev_num }}{% if arama %}&q={{ arama }}{% endif %}">Onceki</a></li>
+                {% if logs.has_prev %}
+                <li class="page-item"><a class="page-link" href="?sayfa={{ logs.prev_num }}{% if search %}&q={{ search }}{% endif %}">Onceki</a></li>
                 {% endif %}
-                {% for p in loglar.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+                {% for p in logs.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
                     {% if p %}
-                    <li class="page-item {% if p == loglar.page %}active{% endif %}">
-                        <a class="page-link" href="?sayfa={{ p }}{% if arama %}&q={{ arama }}{% endif %}">{{ p }}</a>
+                    <li class="page-item {% if p == logs.page %}active{% endif %}">
+                        <a class="page-link" href="?sayfa={{ p }}{% if search %}&q={{ search }}{% endif %}">{{ p }}</a>
                     </li>
                     {% else %}
                     <li class="page-item disabled"><span class="page-link">...</span></li>
                     {% endif %}
                 {% endfor %}
-                {% if loglar.has_next %}
-                <li class="page-item"><a class="page-link" href="?sayfa={{ loglar.next_num }}{% if arama %}&q={{ arama }}{% endif %}">Sonraki</a></li>
+                {% if logs.has_next %}
+                <li class="page-item"><a class="page-link" href="?sayfa={{ logs.next_num }}{% if search %}&q={{ search }}{% endif %}">Sonraki</a></li>
                 {% endif %}
             </ul>
         </nav>

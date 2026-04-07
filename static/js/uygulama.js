@@ -1,20 +1,20 @@
-function panoyaKopyala(elementId) {
-    const metin = document.getElementById(elementId).innerText;
-    navigator.clipboard.writeText(metin).then(function () {
-        bildirimGoster('Kopyalandi!');
+function copyToClipboard(elementId) {
+    const text = document.getElementById(elementId).innerText;
+    navigator.clipboard.writeText(text).then(function () {
+        showNotification('Kopyalandi!');
     });
 }
 
-function bildirimGoster(mesaj, tip = 'success') {
+function showNotification(message, type = 'success') {
     const container = document.getElementById('toast-container');
     if (!container) return;
 
     const toast = document.createElement('div');
-    toast.className = `toast align-items-center text-bg-${tip} border-0 show`;
+    toast.className = `toast align-items-center text-bg-${type} border-0 show`;
     toast.setAttribute('role', 'alert');
     toast.innerHTML = `
         <div class="d-flex">
-            <div class="toast-body">${mesaj}</div>
+            <div class="toast-body">${message}</div>
             <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
         </div>
     `;
@@ -23,8 +23,8 @@ function bildirimGoster(mesaj, tip = 'success') {
 }
 
 document.addEventListener('htmx:afterRequest', function (event) {
-    const mesaj = event.detail.xhr.getResponseHeader('X-Bildirim');
-    if (mesaj) {
-        bildirimGoster(decodeURIComponent(mesaj));
+    const message = event.detail.xhr.getResponseHeader('X-Notification');
+    if (message) {
+        showNotification(decodeURIComponent(message));
     }
 });

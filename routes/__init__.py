@@ -1,22 +1,22 @@
 def register_blueprints(app):
-    from routes.ana_sayfa import bp as ana_sayfa_bp
-    from routes.odemeler import bp as odemeler_bp
-    from routes.giderler import bp as giderler_bp
-    from routes.kasa import bp as kasa_bp
-    from routes.mesajlar import bp as mesajlar_bp
-    from routes.raporlar import bp as raporlar_bp
-    from routes.ayarlar import bp as ayarlar_bp
-    from routes.loglar import bp as loglar_bp
-    from routes.notlar import bp as notlar_bp
-    from routes.rehber import bp as rehber_bp
+    from routes.dashboard import bp as dashboard_bp
+    from routes.payments import bp as payments_bp
+    from routes.expenses import bp as expenses_bp
+    from routes.cash_register import bp as cash_register_bp
+    from routes.messages import bp as messages_bp
+    from routes.reports import bp as reports_bp
+    from routes.notes import bp as notes_bp
+    from routes.directory import bp as directory_bp
+    from routes.settings import bp as settings_bp
+    from routes.logs import bp as logs_bp
 
-    app.register_blueprint(ana_sayfa_bp)
-    app.register_blueprint(odemeler_bp)
-    app.register_blueprint(giderler_bp)
-    app.register_blueprint(kasa_bp)
-    app.register_blueprint(mesajlar_bp)
-    app.register_blueprint(raporlar_bp)
-    app.register_blueprint(notlar_bp)
-    app.register_blueprint(rehber_bp)
-    app.register_blueprint(ayarlar_bp)
-    app.register_blueprint(loglar_bp)
+    app.register_blueprint(dashboard_bp)
+    app.register_blueprint(payments_bp)
+    app.register_blueprint(expenses_bp)
+    app.register_blueprint(cash_register_bp)
+    app.register_blueprint(messages_bp)
+    app.register_blueprint(reports_bp)
+    app.register_blueprint(notes_bp)
+    app.register_blueprint(directory_bp)
+    app.register_blueprint(settings_bp)
+    app.register_blueprint(logs_bp)

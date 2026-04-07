@@ -10,8 +10,8 @@ def create_app(config_class=None):
 
     db.init_app(app)
 
-    # Rapor dizinini olustur
-    os.makedirs(app.config['RAPORLAR_DIZINI'], exist_ok=True)
+    # Create reports directory
+    os.makedirs(app.config['REPORTS_DIR'], exist_ok=True)
 
     init_db(app)
 

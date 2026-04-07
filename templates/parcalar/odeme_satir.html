@@ -1,25 +1,25 @@
-<tr id="odeme-satir-{{ daire.id }}">
-    <td>{{ daire.daire_no }}</td>
-    <td>{{ daire.sakin_adi or '-' }}</td>
+<tr id="odeme-satir-{{ apartment.id }}">
+    <td>{{ apartment.unit_no }}</td>
+    <td>{{ apartment.resident_name or '-' }}</td>
     <td class="text-center">
-        <button class="odeme-btn {{ 'odendi' if odeme and odeme.odendi else 'odenmedi' }}"
-                hx-post="{{ url_for('odemeler.toggle', daire_id=daire.id, yil=yil, ay=ay) }}"
-                hx-target="#odeme-satir-{{ daire.id }}"
+        <button class="odeme-btn {{ 'odendi' if payment and payment.is_paid else 'odenmedi' }}"
+                hx-post="{{ url_for('payments.toggle', daire_id=apartment.id, yil=year, ay=month) }}"
+                hx-target="#odeme-satir-{{ apartment.id }}"
                 hx-swap="outerHTML">
-            {% if odeme and odeme.odendi %}
+            {% if payment and payment.is_paid %}
                 <i class="bi bi-check-circle-fill"></i>
             {% else %}
                 <i class="bi bi-x-circle-fill"></i>
             {% endif %}
         </button>
     </td>
-    <td>{% if odeme and odeme.odendi and odeme.odeme_tarihi %}{{ odeme.odeme_tarihi.strftime('%d.%m.%Y') }}{% else %}-{% endif %}</td>
+    <td>{% if payment and payment.is_paid and payment.payment_date %}{{ payment.payment_date.strftime('%d.%m.%Y') }}{% else %}-{% endif %}</td>
     <td>
-        <a href="{{ url_for('odemeler.daire_detay', daire_id=daire.id) }}" class="btn btn-sm btn-outline-info"><i class="bi bi-eye"></i></a>
-        <button class="btn btn-sm btn-outline-warning" title="Toplu odeme" data-bs-toggle="modal" data-bs-target="#topluModal{{ daire.id }}">
+        <a href="{{ url_for('payments.apartment_detail', daire_id=apartment.id) }}" class="btn btn-sm btn-outline-info"><i class="bi bi-eye"></i></a>
+        <button class="btn btn-sm btn-outline-warning" title="Toplu odeme" data-bs-toggle="modal" data-bs-target="#topluModal{{ apartment.id }}">
             <i class="bi bi-calendar-check"></i>
         </button>
-        <a href="{{ url_for('odemeler.daire_rapor', daire_id=daire.id, yil=yil) }}" class="btn btn-sm btn-outline-success" title="Daire raporu">
+        <a href="{{ url_for('payments.apartment_report', daire_id=apartment.id, yil=year) }}" class="btn btn-sm btn-outline-success" title="Daire raporu">
             <i class="bi bi-file-earmark-pdf"></i>
         </a>
     </td>

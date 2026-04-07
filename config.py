@@ -7,4 +7,4 @@ class Config:
     SECRET_KEY = 'apartman-yonetim-local-key'
     SQLALCHEMY_DATABASE_URI = f'sqlite:///{os.path.join(BASE_DIR, "apartman.db")}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    RAPORLAR_DIZINI = os.path.join(BASE_DIR, 'raporlar')
+    REPORTS_DIR = os.path.join(BASE_DIR, 'reports')

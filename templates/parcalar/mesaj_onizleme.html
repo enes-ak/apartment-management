@@ -1,14 +1,14 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <span>{{ ay_adi }} {{ yil }} - Mesaj Onizleme</span>
-        <button class="btn btn-success btn-sm" onclick="panoyaKopyala('mesaj-icerik')">
+        <span>{{ month_name }} {{ year }} - Mesaj Onizleme</span>
+        <button class="btn btn-success btn-sm" onclick="copyToClipboard('mesaj-icerik')">
             <i class="bi bi-clipboard"></i> Kopyala
         </button>
     </div>
     <div class="card-body">
-        <div id="mesaj-icerik" class="mesaj-preview">{{ mesaj }}</div>
+        <div id="mesaj-icerik" class="mesaj-preview">{{ message }}</div>
     </div>
     <div class="card-footer">
-        Toplam {{ daireler|length }} daire listelendi.
+        Toplam {{ apartments|length }} daire listelendi.
     </div>
 </div>

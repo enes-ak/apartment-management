@@ -4,30 +4,30 @@ db = SQLAlchemy()
 
 
 def init_db(app):
-    """Tablolari olustur ve varsayilan verileri ekle."""
+    """Create tables and seed default data."""
     with app.app_context():
-        from models import Daire, AidatAyari, GiderKalemi, Ayar
+        from models import Apartment, DuesConfig, ExpenseCategory, Setting
         db.create_all()
 
-        # 12 daire yoksa olustur
-        if Daire.query.count() == 0:
+        # Create 12 apartments if none exist
+        if Apartment.query.count() == 0:
             for i in range(1, 13):
-                daire = Daire(daire_no=i, kat=(i - 1) // 2 + 1, sakin_adi='', telefon='')
-                db.session.add(daire)
+                apartment = Apartment(unit_no=i, floor=(i - 1) // 2 + 1, resident_name='', phone='')
+                db.session.add(apartment)
 
-        # Varsayilan aidat ayari
-        if AidatAyari.query.count() == 0:
+        # Default dues config
+        if DuesConfig.query.count() == 0:
             from datetime import date
-            ayar = AidatAyari(miktar=0, gecerlilik_tarihi=date.today())
-            db.session.add(ayar)
+            config = DuesConfig(amount=0, effective_date=date.today())
+            db.session.add(config)
 
-        # Varsayilan gider kalemleri
-        if GiderKalemi.query.count() == 0:
-            for kalem in ['Elektrik', 'Su', 'Temizlik', 'Asansor Bakim']:
-                db.session.add(GiderKalemi(kalem_adi=kalem, aktif=True))
+        # Default expense categories
+        if ExpenseCategory.query.count() == 0:
+            for name in ['Elektrik', 'Su', 'Temizlik', 'Asansor Bakim']:
+                db.session.add(ExpenseCategory(category_name=name, is_active=True))
 
-        # Varsayilan ayarlar
-        varsayilan_ayarlar = {
+        # Default settings
+        default_settings = {
             'apartman_adi': 'Apartman',
             'mail_adresi': '',
             'smtp_sunucu': 'smtp.gmail.com',
@@ -43,8 +43,8 @@ def init_db(app):
                 'Tesekkurler,\nApartman Yonetimi'
             ),
         }
-        for anahtar, deger in varsayilan_ayarlar.items():
-            if not Ayar.query.filter_by(anahtar=anahtar).first():
-                db.session.add(Ayar(anahtar=anahtar, deger=deger))
+        for key, value in default_settings.items():
+            if not Setting.query.filter_by(key=key).first():
+                db.session.add(Setting(key=key, value=value))
 
         db.session.commit()
