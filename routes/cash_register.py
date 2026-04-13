@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from models import CashRegister, Payment, Expense, ExpenseCategory, Apartment, DuesConfig
+from models import CashRegister, Payment, Expense, ExpenseCategory, Apartment, DuesConfig, ExtraCollection, ExtraPayment
 from database import db
 from services.cash_service import calculate_cash
 
@@ -15,9 +15,18 @@ def index():
     dues = DuesConfig.current_amount()
     total_apartments = Apartment.query.count()
 
-    # Total income: all paid dues in the year
+    # Dues income
     total_paid = Payment.query.filter_by(year=year, is_paid=True).count()
-    total_income = total_paid * dues
+    dues_income = total_paid * dues
+
+    # Extra collection income
+    extra_income = 0
+    collections = ExtraCollection.query.filter_by(year=year).all()
+    for c in collections:
+        paid = ExtraPayment.query.filter_by(collection_id=c.id, is_paid=True).count()
+        extra_income += paid * c.per_unit_amount
+
+    total_income = dues_income + extra_income
 
     # Total expense: all expenses in the year
     expenses = Expense.query.filter_by(year=year).all()
@@ -32,7 +41,7 @@ def index():
         category_name = e.category.category_name
         expense_breakdown[category_name] = expense_breakdown.get(category_name, 0) + e.amount
 
-    # Collection rate
+    # Collection rate (dues only)
     expected_income = total_apartments * 12 * dues
     collection_rate = (total_paid / (total_apartments * 12) * 100) if total_apartments > 0 else 0
 
@@ -46,4 +55,5 @@ def index():
                            balance=balance,
                            expected_income=expected_income,
                            collection_rate=collection_rate,
+                           extra_income=extra_income,
                            expense_distribution=expense_breakdown)

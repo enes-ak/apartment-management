@@ -1,11 +1,20 @@
 from database import db
-from models import CashRegister, Payment, Expense, DuesConfig
+from models import CashRegister, Payment, Expense, DuesConfig, ExtraCollection, ExtraPayment
 
 
 def calculate_cash(year, month):
     dues = DuesConfig.current_amount()
     paid_count = Payment.query.filter_by(year=year, month=month, is_paid=True).count()
-    total_income = paid_count * dues
+    dues_income = paid_count * dues
+
+    # Extra collection income for this month
+    extra_income = 0
+    collections = ExtraCollection.query.filter_by(year=year, month=month).all()
+    for c in collections:
+        paid = ExtraPayment.query.filter_by(collection_id=c.id, is_paid=True).count()
+        extra_income += paid * c.per_unit_amount
+
+    total_income = dues_income + extra_income
     expenses = Expense.query.filter_by(year=year, month=month).all()
     total_expense = sum(e.amount for e in expenses)
     carryover = 0

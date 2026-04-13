@@ -45,6 +45,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint and 'extra_collections' in request.endpoint %}active{% endif %}" href="{{ url_for('extra_collections.index') }}">
+                        <i class="bi bi-cash-coin"></i> Ekstra Tahsilat
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link {% if request.endpoint and 'expenses' in request.endpoint %}active{% endif %}" href="{{ url_for('expenses.index') }}">
                         <i class="bi bi-receipt"></i> Giderler
                     </a>

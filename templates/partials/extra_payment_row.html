@@ -1,0 +1,18 @@
+<tr id="ekstra-satir-{{ ep.id }}">
+    <td>{{ ep.apartment.unit_no }}</td>
+    <td>{{ ep.apartment.resident_name or '-' }}</td>
+    <td class="text-center">{{ "%.2f"|format(collection.per_unit_amount) }} TL</td>
+    <td class="text-center">
+        <button class="odeme-btn {{ 'odendi' if ep.is_paid else 'odenmedi' }}"
+                hx-post="{{ url_for('extra_collections.toggle', payment_id=ep.id) }}"
+                hx-target="#ekstra-satir-{{ ep.id }}"
+                hx-swap="outerHTML">
+            {% if ep.is_paid %}
+                <i class="bi bi-check-circle-fill"></i>
+            {% else %}
+                <i class="bi bi-x-circle-fill"></i>
+            {% endif %}
+        </button>
+    </td>
+    <td>{% if ep.is_paid and ep.payment_date %}{{ ep.payment_date.strftime('%d.%m.%Y') }}{% else %}-{% endif %}</td>
+</tr>

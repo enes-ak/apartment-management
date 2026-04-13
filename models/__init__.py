@@ -6,5 +6,6 @@ from models.setting import Setting, DuesConfig, Notification
 from models.log import Log
 from models.note import MonthlyNote
 from models.directory import Directory
+from models.extra_collection import ExtraCollection, ExtraPayment
 
-__all__ = ['Apartment', 'Payment', 'ExpenseCategory', 'Expense', 'CashRegister', 'Setting', 'DuesConfig', 'Notification', 'Log', 'MonthlyNote', 'Directory']
+__all__ = ['Apartment', 'Payment', 'ExpenseCategory', 'Expense', 'CashRegister', 'Setting', 'DuesConfig', 'Notification', 'Log', 'MonthlyNote', 'Directory', 'ExtraCollection', 'ExtraPayment']

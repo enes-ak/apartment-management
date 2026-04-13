@@ -124,6 +124,52 @@
             </div>
         </div>
     </div>
+
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header"><i class="bi bi-table"></i> Yillik Odeme Matrisi</div>
+            <div class="card-body">
+                <p style="color:var(--text-secondary); font-size:0.84rem">Tum dairelerin 12 aylik odeme durumu (&#10003; / &#10007;).</p>
+                <form id="form-odeme-matrisi">
+                    <div class="d-flex gap-2 mb-3" style="max-width:200px">
+                        <select class="form-select form-select-sm" name="yil">
+                            {% for y in range(2026, year + 2) %}
+                            <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="raporIndir('odeme_matrisi', this.closest('form'), 'pdf')">
+                            <i class="bi bi-file-earmark-pdf"></i> PDF Indir
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header"><i class="bi bi-cash-stack"></i> Kumulatif Gider ve Kasa Raporu</div>
+            <div class="card-body">
+                <p style="color:var(--text-secondary); font-size:0.84rem">Yil boyunca kumulatif gelir/gider, kategori dagilimi ve aylik kasa durumu.</p>
+                <form id="form-kumulatif">
+                    <div class="d-flex gap-2 mb-3" style="max-width:200px">
+                        <select class="form-select form-select-sm" name="yil">
+                            {% for y in range(2026, year + 2) %}
+                            <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="raporIndir('kumulatif', this.closest('form'), 'pdf')">
+                            <i class="bi bi-file-earmark-pdf"></i> PDF Indir
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>

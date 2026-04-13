@@ -13,6 +13,8 @@ REPORT_TYPES = {
     'odeme_durumu': 'Odeme Durumu Raporu',
     'gider_detay': 'Gider Detay Raporu',
     'yillik_ozet': 'Yillik Ozet Raporu',
+    'odeme_matrisi': 'Yillik Odeme Matrisi (Tum Daireler)',
+    'kumulatif': 'Kumulatif Gider ve Kasa Raporu',
 }
 
 
@@ -39,6 +41,8 @@ def generate():
         ('gider_detay', 'pdf'): lambda: report_service.expense_detail_pdf(year, month),
         ('yillik_ozet', 'excel'): lambda: report_service.annual_summary_excel(year),
         ('yillik_ozet', 'pdf'): lambda: report_service.annual_summary_pdf(year),
+        ('odeme_matrisi', 'pdf'): lambda: report_service.payment_matrix_pdf(year),
+        ('kumulatif', 'pdf'): lambda: report_service.cumulative_report_pdf(year),
     }
 
     func = functions.get((report_type, fmt))

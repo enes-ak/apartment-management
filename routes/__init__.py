@@ -9,9 +9,11 @@ def register_blueprints(app):
     from routes.directory import bp as directory_bp
     from routes.settings import bp as settings_bp
     from routes.logs import bp as logs_bp
+    from routes.extra_collections import bp as extra_collections_bp
 
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(payments_bp)
+    app.register_blueprint(extra_collections_bp)
     app.register_blueprint(expenses_bp)
     app.register_blueprint(cash_register_bp)
     app.register_blueprint(messages_bp)

@@ -13,10 +13,10 @@ def is_first_monday(today=None):
 
 
 def send_email(subject, body):
-    email_address = Setting.getir('mail_adresi')
-    smtp_server = Setting.getir('smtp_sunucu', 'smtp.gmail.com')
-    smtp_port = int(Setting.getir('smtp_port', '587'))
-    smtp_password = Setting.getir('smtp_sifre')
+    email_address = Setting.get('mail_adresi')
+    smtp_server = Setting.get('smtp_sunucu', 'smtp.gmail.com')
+    smtp_port = int(Setting.get('smtp_port', '587'))
+    smtp_password = Setting.get('smtp_sifre')
     if not email_address or not smtp_password:
         return False
     message = MIMEMultipart()
@@ -39,13 +39,13 @@ def check_dues_reminder():
     if not is_first_monday(today):
         return
     year, month = today.year, today.month
-    notification = Notification.query.filter_by(yil=year, ay=month).first()
-    if notification and notification.gonderildi:
+    notification = Notification.query.filter_by(year=year, month=month).first()
+    if notification and notification.is_sent:
         return
     total_apartments = Apartment.query.count()
     paid = Payment.query.filter_by(year=year, month=month, is_paid=True).count()
     unpaid = total_apartments - paid
-    building_name = Setting.getir('apartman_adi', 'Apartman')
+    building_name = Setting.get('apartman_adi', 'Apartman')
     subject = f'{building_name} - Aidat Hatirlatmasi'
     body = (
         f'Aidat toplama zamani geldi!\n\n'
@@ -56,9 +56,9 @@ def check_dues_reminder():
     )
     result = send_email(subject, body)
     if notification is None:
-        notification = Notification(yil=year, ay=month)
+        notification = Notification(year=year, month=month)
         db.session.add(notification)
-    notification.gonderildi = result
+    notification.is_sent = result
     if result:
-        notification.gonderim_tarihi = datetime.now()
+        notification.sent_date = datetime.now()
     db.session.commit()

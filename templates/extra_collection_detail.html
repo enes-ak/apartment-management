@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}{{ collection.description }} - Ekstra Tahsilat{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="page-title mb-0"><i class="bi bi-cash-coin"></i> {{ collection.description }}</h2>
+    <a href="{{ url_for('extra_collections.index') }}" class="btn btn-sm btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Geri
+    </a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card accent-blue">
+            <div class="stat-label">Toplam Tutar</div>
+            <div class="stat-value text-accent-blue">{{ "%.0f"|format(collection.total_amount) }} <small style="font-size:0.6em">TL</small></div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card accent-yellow">
+            <div class="stat-label">Daire Basi</div>
+            <div class="stat-value text-accent-yellow">{{ "%.0f"|format(collection.per_unit_amount) }} <small style="font-size:0.6em">TL</small></div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card accent-green">
+            <div class="stat-label">Odenen</div>
+            <div class="stat-value text-accent-green">{{ paid_count }} <small style="font-size:0.6em">/ {{ total_count }}</small></div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card accent-red">
+            <div class="stat-label">Kalan</div>
+            <div class="stat-value text-accent-red">{{ "%.0f"|format((total_count - paid_count) * collection.per_unit_amount) }} <small style="font-size:0.6em">TL</small></div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <span>{{ AY_ISIMLERI[collection.month] }} {{ collection.year }} - Daire Odemeleri</span>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Daire No</th>
+                    <th>Sakin</th>
+                    <th class="text-center">Tutar</th>
+                    <th class="text-center">Durum</th>
+                    <th>Odeme Tarihi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ep in payments %}
+                {% include 'partials/extra_payment_row.html' %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
